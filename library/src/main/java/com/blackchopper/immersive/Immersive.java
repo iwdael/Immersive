@@ -1,20 +1,20 @@
 package com.blackchopper.immersive;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.RequiresApi;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import static com.blackchopper.immersive.ImmersiveHelper.getNavigationBarHeight;
+import static com.blackchopper.immersive.ImmersiveHelper.getScreenPix;
+import static com.blackchopper.immersive.ImmersiveHelper.getStatusBarHeight;
+import static com.blackchopper.immersive.ImmersiveHelper.hasNavigationBarShow;
 
 /**
  * author  : Black Chopper
@@ -23,26 +23,24 @@ import android.widget.LinearLayout;
  * project : Immersive
  */
 public class Immersive {
-    public static final String TAG=Immersive.class.getName();
+    private static final String TAG = Immersive.class.getName();
 
-    public static void compatible(Activity activity, boolean navigationEmbed) {
+    private static void compatible(Activity activity, boolean navigationEmbed) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //设置虚拟导航栏为透明
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            Log.i(TAG, "compatible: system version < "+Build.VERSION_CODES.LOLLIPOP);
+            Log.i(TAG, "compatible: system version < " + Build.VERSION_CODES.LOLLIPOP);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //>=5.0
-            Log.i(TAG, "compatible: system version >= "+Build.VERSION_CODES.LOLLIPOP);
+            Log.i(TAG, "compatible: system version >= " + Build.VERSION_CODES.LOLLIPOP);
             if (navigationEmbed)
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//
-            activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.translucent));
-            activity.getWindow().setNavigationBarColor(activity.getResources().getColor(R.color.translucent));
+            activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.immersive_translucent));
+            activity.getWindow().setNavigationBarColor(activity.getResources().getColor(R.color.immersive_translucent));
         }
     }
 
@@ -56,6 +54,7 @@ public class Immersive {
             container.setLayoutParams(containerParams);
             //status
             View statusBar = new View(activity);
+            statusBar.setId(R.id.status);
             ViewGroup.LayoutParams statusParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
             statusBar.setLayoutParams(statusParams);
             statusBar.setBackgroundResource(statusRes);
@@ -77,6 +76,7 @@ public class Immersive {
                     && !navigationEmbed
                     && hasNavigationBarShow(activity)) {
                 View navigationBar = new View(activity);
+                navigationBar.setId(R.id.navigation);
                 ViewGroup.LayoutParams navigatioParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getNavigationBarHeight(activity));
                 navigationBar.setLayoutParams(navigatioParams);
                 navigationBar.setBackgroundResource(navigationRes);
@@ -101,6 +101,7 @@ public class Immersive {
                 container.addView(layout);
                 //navigation
                 View navigationBar = new View(activity);
+                navigationBar.setId(R.id.navigation);
                 ViewGroup.LayoutParams navigatioParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getNavigationBarHeight(activity));
                 navigationBar.setLayoutParams(navigatioParams);
                 navigationBar.setBackgroundResource(navigationRes);
@@ -118,53 +119,31 @@ public class Immersive {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private static boolean hasNavigationBarShow(Activity activity) {
-        WindowManager wm = activity.getWindowManager();
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        //获取整个屏幕的高度
-        display.getRealMetrics(outMetrics);
-        int heightPixels = outMetrics.heightPixels;
-        int widthPixels = outMetrics.widthPixels;
-        //获取内容展示部分的高度
-        outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-        int heightPixels2 = outMetrics.heightPixels;
-        int widthPixels2 = outMetrics.widthPixels;
-        int w = widthPixels - widthPixels2;
-        int h = heightPixels - heightPixels2;
-        return w > 0 || h > 0;//竖屏和横屏两种情况。
+    public static void setStatusBarColorRes(Activity activity, int colorRes) {
+        View status = activity.findViewById(R.id.status);
+        if (status != null)
+            status.setBackgroundResource(colorRes);
     }
 
-    private static DisplayMetrics getScreenPix(Activity activity) {
-        DisplayMetrics displaysMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displaysMetrics);
-        return displaysMetrics;
+    public static void setNavigationBarColorRes(Activity activity, int colorRes) {
+        View navigation = activity.findViewById(R.id.navigation);
+        if (navigation != null)
+            navigation.setBackgroundResource(colorRes);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            activity.getWindow().setNavigationBarColor(activity.getResources().getColor(colorRes));
     }
 
-    private static int getSystemComponentDimen(Context context, String dimenName) {
-        // 反射手机运行的类：android.R.dimen.status_bar_height.
-        int statusHeight = 0;
-        try {
-            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
-            Object object = clazz.newInstance();
-            String heightStr = clazz.getField(dimenName).get(object).toString();
-            int height = Integer.parseInt(heightStr);
-            //dp--->px
-            statusHeight = context.getResources().getDimensionPixelSize(height);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return statusHeight;
+    public static void setStatusBarColor(Activity activity, int color) {
+        View status = activity.findViewById(R.id.status);
+        if (status != null)
+            status.setBackgroundColor(color);
     }
 
-    private static int getNavigationBarHeight(Context context) {
-        return getSystemComponentDimen(context, "navigation_bar_height");
-    }
-
-    public static int getStatusBarHeight(Context context) {
-        // 反射手机运行的类：android.R.dimen.status_bar_height.
-        return getSystemComponentDimen(context, "status_bar_height");
+    public static void setNavigationBarColor(Activity activity, int color) {
+        View navigation = activity.findViewById(R.id.navigation);
+        if (navigation != null)
+            navigation.setBackgroundColor(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            activity.getWindow().setNavigationBarColor(color);
     }
 }
