@@ -7,10 +7,12 @@ import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
@@ -21,21 +23,26 @@ import android.widget.LinearLayout;
  * project : Immersive
  */
 public class Immersive {
-
+    public static final String TAG=Immersive.class.getName();
 
     public static void compatible(Activity activity, boolean navigationEmbed) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //设置虚拟导航栏为透明
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            Log.i(TAG, "compatible: system version < "+Build.VERSION_CODES.LOLLIPOP);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //>=5.0
+            Log.i(TAG, "compatible: system version >= "+Build.VERSION_CODES.LOLLIPOP);
             if (navigationEmbed)
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-            activity.getWindow().setNavigationBarColor(Color.TRANSPARENT);
+//            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//
+            activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.translucent));
+            activity.getWindow().setNavigationBarColor(activity.getResources().getColor(R.color.translucent));
         }
     }
 
@@ -106,6 +113,7 @@ public class Immersive {
                 }
                 activity.setContentView(layoutRes);
             }
+
         }
     }
 
