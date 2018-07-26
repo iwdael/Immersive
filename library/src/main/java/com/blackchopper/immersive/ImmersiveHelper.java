@@ -14,7 +14,7 @@ import android.view.WindowManager;
  * github  : http://github.com/BlackChopper
  * project : Immersive
  */
-class ImmersiveHelper {
+public class ImmersiveHelper {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static boolean hasNavigationBarShow(Activity activity) {
         WindowManager wm = activity.getWindowManager();
