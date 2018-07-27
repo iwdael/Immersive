@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-
+import com.blackchopper.immersive.R.id;
 import com.blackchopper.immersive.ImmersiveHelper;
 
 /**
@@ -17,15 +17,16 @@ public class StatusView extends View {
 
 
     public StatusView(Context context) {
-        super(context);
+        this(context,null);
     }
 
     public StatusView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
     }
 
     public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setId(id.status);
     }
 
 
