@@ -53,10 +53,7 @@ public class Immersive {
 
         if (!statusEmbed) {
 
-            View status = new View(activity);
-            status.setId(id.status);
-            LayoutParams status_layout = new LayoutParams(-1, ImmersiveHelper.getStatusBarHeight(activity));
-            status.setLayoutParams(status_layout);
+            StatusView status = new StatusView(activity);
             status.setBackgroundResource(statusRes);
             immersive_status.addView(status);
             immersive_content.addView(LayoutInflater.from(activity).inflate(layoutRes, (ViewGroup) null));
