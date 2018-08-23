@@ -31,7 +31,7 @@ public class ImmersiveHelper {
         int widthPixels2 = outMetrics.widthPixels;
         int w = widthPixels - widthPixels2;
         int h = heightPixels - heightPixels2;
-        return w == 0 && h == 0 && getNavigationBarHeight(activity)==0;//竖屏和横屏两种情况。
+        return !(w == 0 && h == 0 && getNavigationBarHeight(activity)==0);//竖屏和横屏两种情况。
     }
 
     public static DisplayMetrics getScreenPix(Activity activity) {
