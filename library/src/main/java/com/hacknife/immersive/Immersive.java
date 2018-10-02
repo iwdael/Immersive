@@ -1,4 +1,4 @@
-package com.blackchopper.immersive;
+package com.hacknife.immersive;
 
 import android.app.Activity;
 import android.os.Build;
@@ -12,10 +12,16 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
 
-import com.blackchopper.immersive.R.color;
-import com.blackchopper.immersive.R.id;
+import com.hacknife.immersive.R.color;
+import com.hacknife.immersive.R.id;
 
 
+/**
+ * author  : Hacknife
+ * e-mail  : 4884280@qq.com
+ * github  : http://github.com/hacknife
+ * project : Immersive
+ */
 public class Immersive {
     private static final String TAG = Immersive.class.getName();
 

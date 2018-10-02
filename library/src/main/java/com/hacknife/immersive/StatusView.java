@@ -1,16 +1,15 @@
-package com.blackchopper.immersive;
+package com.hacknife.immersive;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import com.blackchopper.immersive.R.id;
-import com.blackchopper.immersive.ImmersiveHelper;
+import com.hacknife.immersive.R.id;
 
 /**
- * author  : Black Chopper
+ * author  : Hacknife
  * e-mail  : 4884280@qq.com
- * github  : http://github.com/BlackChopper
+ * github  : http://github.com/hacknife
  * project : Immersive
  */
 public class StatusView extends View {

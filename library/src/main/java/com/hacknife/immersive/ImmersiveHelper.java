@@ -1,4 +1,4 @@
-package com.blackchopper.immersive;
+package com.hacknife.immersive;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.view.Display;
 import android.view.WindowManager;
 
 /**
- * author  : Black Chopper
+ * author  : Hacknife
  * e-mail  : 4884280@qq.com
- * github  : http://github.com/BlackChopper
+ * github  : http://github.com/hacknife
  * project : Immersive
  */
 public class ImmersiveHelper {
