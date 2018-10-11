@@ -2,6 +2,16 @@
 一行代码实现沉浸式，适配android4.4到8.0+，沉浸式前所未有的简单。
 
 ## 代码示例
+```Java
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Immersive.setContentView(this, R.layout.activity_main, R.color.blue, R.color.green, false, false);
+    }
+}
+
+```
 使用以下方法代替Activity.setContentView()，即可实现沉浸式。
 ```Java
     /**
