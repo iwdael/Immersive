@@ -1,6 +1,5 @@
 # Immersive
-[![](https://img.shields.io/badge/platform-android-orange.svg)](https://github.com/hacknife/immersive) [![](https://jitpack.io/v/com.hacknife/immersive.svg)](https://jitpack.io/#com.hacknife/immersive)
-<br/>
+[![](https://img.shields.io/badge/platform-android-orange.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/language-java-yellow.svg)](https://github.com/hacknife) [![](https://jitpack.io/v/com.hacknife/immersive.svg)](https://jitpack.io/#com.hacknife/immersive) [![](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/api-19+-green.svg)](https://github.com/hacknife)<br/><br/>
 一行代码实现沉浸式，适配android4.4到8.0+，沉浸式前所未有的简单。
 </br></br>
 ![Image Text](https://github.com/hacknife/immersive/blob/master/immersive.gif)
