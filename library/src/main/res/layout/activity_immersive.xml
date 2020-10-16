@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <com.hacknife.immersive.StatusView
         android:id="@+id/immersive_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -17,7 +17,7 @@
         android:layout_weight="1"
         android:orientation="vertical" />
 
-    <FrameLayout
+    <com.hacknife.immersive.NavigationView
         android:id="@+id/immersive_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

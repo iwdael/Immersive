@@ -9,11 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 
-import com.hacknife.immersive.R.color;
-import com.hacknife.immersive.R.id;
+import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+import static android.view.Window.FEATURE_NO_TITLE;
+import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
 
 /**
@@ -28,96 +35,81 @@ public class Immersive {
     public Immersive() {
     }
 
-    private static void compatible(Activity activity, boolean navigationEmbed) {
+    private static void compatible(Activity activity) {
         if (VERSION.SDK_INT >= 19 && VERSION.SDK_INT < 21) {
-            activity.getWindow().requestFeature(1);
-            activity.getWindow().addFlags(67108864);
-            activity.getWindow().addFlags(134217728);
-            Log.i(TAG, "compatible: system version < 21");
+            activity.getWindow().requestFeature(FEATURE_NO_TITLE);
+            activity.getWindow().addFlags(FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().addFlags(FLAG_TRANSLUCENT_NAVIGATION);
         }
-
         if (VERSION.SDK_INT >= 21) {
-            Log.i(TAG, "compatible: system version >= 21");
-            if (navigationEmbed) {
-                activity.getWindow().addFlags(134217728);
-            }
-
-            activity.getWindow().getDecorView().setSystemUiVisibility(1280);
-            activity.getWindow().setStatusBarColor(activity.getResources().getColor(color.immersive_translucent));
-            activity.getWindow().setNavigationBarColor(activity.getResources().getColor(color.immersive_translucent));
+            activity.getWindow().addFlags(SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            activity.getWindow().addFlags(SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         }
-
     }
 
     public static void setContentView(Activity activity, @LayoutRes int layoutRes, int statusRes, int navigationRes, boolean statusEmbed, boolean navigationEmbed) {
-        compatible(activity, navigationEmbed);
+        compatible(activity);
         activity.setContentView(R.layout.activity_immersive);
-        FrameLayout immersive_status = activity.findViewById(R.id.immersive_status);
-        FrameLayout immersive_content = activity.findViewById(R.id.immersive_content);
-        FrameLayout immersive_navigation = activity.findViewById(R.id.immersive_navigation);
+        StatusView statusView = activity.findViewById(R.id.immersive_status);
+        FrameLayout content = activity.findViewById(R.id.immersive_content);
+        NavigationView navigationView = activity.findViewById(R.id.immersive_navigation);
+        statusView.setBackgroundResource(statusRes);
+        navigationView.setBackgroundResource(navigationRes);
+        if (statusEmbed) statusView.setVisibility(View.GONE);
+        if (navigationEmbed) navigationView.setVisibility(View.GONE);
+        content.addView(LayoutInflater.from(activity).inflate(layoutRes, null));
+    }
+
+    public static void hideStatus(Activity activity) {
+        StatusView statusView = activity.findViewById(R.id.immersive_status);
+        if (statusView != null) statusView.setVisibility(View.GONE);
+    }
+
+    public static boolean isShowOfStatus(Activity activity) {
+        StatusView statusView = activity.findViewById(R.id.immersive_status);
+        if (statusView != null) return statusView.getVisibility() == View.VISIBLE;
+        return false;
+    }
+
+    public static boolean isShowOfNavigation(Activity activity) {
+        NavigationView navigationView = activity.findViewById(R.id.immersive_navigation);
+        if (navigationView != null) return navigationView.getVisibility() == View.VISIBLE;
+        return false;
+    }
 
 
-        if (!statusEmbed) {
+    public static void showStatus(Activity activity) {
+        StatusView statusView = activity.findViewById(R.id.immersive_status);
+        if (statusView != null) statusView.setVisibility(View.VISIBLE);
+    }
 
-            StatusView status = new StatusView(activity);
-            status.setBackgroundResource(statusRes);
-            immersive_status.addView(status);
-            immersive_content.addView(LayoutInflater.from(activity).inflate(layoutRes, (ViewGroup) null));
+    public static void hideNavigation(Activity activity) {
+        NavigationView navigationView = activity.findViewById(R.id.immersive_navigation);
+        if (navigationView != null) navigationView.setVisibility(View.GONE);
+    }
 
-            if (VERSION.SDK_INT >= 21 && !navigationEmbed) {
-                activity.getWindow().setNavigationBarColor(activity.getResources().getColor(navigationRes));
-            }
-
-            if (VERSION.SDK_INT < 21 && VERSION.SDK_INT >= 19 && !navigationEmbed && ImmersiveHelper.hasNavigationBarShow(activity)) {
-                View navigationBar = new View(activity);
-                navigationBar.setId(id.navigation);
-                LayoutParams navigatioParams = new LayoutParams(-1, ImmersiveHelper.getNavigationBarHeight(activity));
-                navigationBar.setLayoutParams(navigatioParams);
-                navigationBar.setBackgroundResource(navigationRes);
-                immersive_navigation.addView(navigationBar);
-            }
-
-        } else if (VERSION.SDK_INT >= 19 && VERSION.SDK_INT < 21 && !navigationEmbed && ImmersiveHelper.hasNavigationBarShow(activity)) {
-
-            immersive_content.addView(LayoutInflater.from(activity).inflate(layoutRes, (ViewGroup) null));
-
-            View navigation = new View(activity);
-            navigation.setId(id.navigation);
-            LayoutParams navigation_layout = new LayoutParams(-1, ImmersiveHelper.getNavigationBarHeight(activity));
-            navigation.setLayoutParams(navigation_layout);
-            navigation.setBackgroundResource(navigationRes);
-            immersive_navigation.addView(navigation);
-        } else {
-            if (VERSION.SDK_INT >= 21 && !navigationEmbed) {
-                activity.getWindow().setNavigationBarColor(activity.getResources().getColor(navigationRes));
-            }
-            immersive_content.addView(LayoutInflater.from(activity).inflate(layoutRes, (ViewGroup) null));
-        }
-
+    public static void showNavigation(Activity activity) {
+        NavigationView navigationView = activity.findViewById(R.id.immersive_navigation);
+        if (navigationView != null) navigationView.setVisibility(View.VISIBLE);
     }
 
     public static void setStatusBarColorRes(Activity activity, int colorRes) {
-        View status = activity.findViewById(id.status);
+        View status = activity.findViewById(R.id.immersive_status);
         if (status != null) {
             status.setBackgroundResource(colorRes);
         }
-
     }
 
+
     public static void setNavigationBarColorRes(Activity activity, int colorRes) {
-        View navigation = activity.findViewById(id.navigation);
+        View navigation = activity.findViewById(R.id.immersive_navigation);
         if (navigation != null) {
             navigation.setBackgroundResource(colorRes);
         }
-
-        if (VERSION.SDK_INT >= 21) {
-            activity.getWindow().setNavigationBarColor(activity.getResources().getColor(colorRes));
-        }
-
     }
 
     public static void setStatusBarColor(Activity activity, int color) {
-        View status = activity.findViewById(id.status);
+        View status = activity.findViewById(R.id.immersive_status);
         if (status != null) {
             status.setBackgroundColor(color);
         }
@@ -125,23 +117,47 @@ public class Immersive {
     }
 
     public static void setNavigationBarColor(Activity activity, int color) {
-        View navigation = activity.findViewById(id.navigation);
+        View navigation = activity.findViewById(R.id.immersive_navigation);
         if (navigation != null) {
             navigation.setBackgroundColor(color);
         }
-
-        if (VERSION.SDK_INT >= 21) {
-            activity.getWindow().setNavigationBarColor(color);
-        }
-
     }
 
-    public static boolean setStatusBarLightMode(Activity activity) {
+    public static View layoutView(Activity activity) {
+        ViewGroup group = activity.<ViewGroup>findViewById(R.id.immersive_content);
+        if (group != null) return group.getChildAt(0);
+        else return null;
+    }
+
+    public static boolean setStatusContentColor(Activity activity, MODE mode) {
         if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.getWindow().getDecorView().setSystemUiVisibility(activity.getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            if (mode == MODE.BLACK)
+                activity.getWindow()
+                        .getDecorView()
+                        .setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR );
+
+            else if (mode == MODE.WHITE)
+                activity.getWindow()
+                        .getDecorView()
+                        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             return true;
         } else {
             return false;
         }
+    }
+    public static boolean setNavigationContentColor(Activity activity, MODE mode) {
+        if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (mode == MODE.BLACK)
+                activity.getWindow().clearFlags(FLAG_TRANSLUCENT_NAVIGATION);
+            else if (mode == MODE.WHITE)
+                activity.getWindow().addFlags(FLAG_TRANSLUCENT_NAVIGATION);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public enum MODE {
+        WHITE, BLACK
     }
 }

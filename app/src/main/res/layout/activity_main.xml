@@ -4,18 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#0080ff">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/app_name"
-            android:textSize="18dp" />
-    </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -77,6 +66,36 @@
             android:layout_marginRight="40dp"
             android:max="255"
             android:progress="12" />
+
+        <Button
+            android:id="@+id/btn_status"
+            android:textSize="20sp"
+            android:text="STATUS"
+            android:layout_centerHorizontal="true"
+            android:layout_width="200dp"
+            android:layout_below="@id/pro_alpha"
+            android:layout_marginTop="40dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_navigation"
+            android:textSize="20sp"
+            android:text="NAVIGATION"
+            android:layout_below="@id/btn_status"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_status_text_color"
+            android:textSize="12sp"
+            android:text="STATUS TEXT COLOR"
+            android:layout_below="@id/btn_navigation"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
 </LinearLayout>
