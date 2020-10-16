@@ -93,20 +93,21 @@ public class Immersive {
         if (navigationView != null) navigationView.setVisibility(View.VISIBLE);
     }
 
-    public static void setStatusBarColorRes(Activity activity, int colorRes) {
-        View status = activity.findViewById(R.id.immersive_status);
-        if (status != null) {
-            status.setBackgroundResource(colorRes);
+
+    public static void setContentBackgroundColor(Activity activity, int color ){
+        View content = activity.findViewById(R.id.immersive_content);
+        if (content != null) {
+            content.setBackgroundColor(color);
+        }
+    }
+    public static void setContentBackgroundColorResource(Activity activity, int colorRes){
+        View content = activity.findViewById(R.id.immersive_content);
+        if (content != null) {
+            content.setBackgroundResource(colorRes);
         }
     }
 
 
-    public static void setNavigationBarColorRes(Activity activity, int colorRes) {
-        View navigation = activity.findViewById(R.id.immersive_navigation);
-        if (navigation != null) {
-            navigation.setBackgroundResource(colorRes);
-        }
-    }
 
     public static void setStatusBarColor(Activity activity, int color) {
         View status = activity.findViewById(R.id.immersive_status);
@@ -115,20 +116,24 @@ public class Immersive {
         }
 
     }
-
+    public static void setStatusBarColorResource(Activity activity, int colorRes) {
+        View status = activity.findViewById(R.id.immersive_status);
+        if (status != null) {
+            status.setBackgroundResource(colorRes);
+        }
+    }
     public static void setNavigationBarColor(Activity activity, int color) {
         View navigation = activity.findViewById(R.id.immersive_navigation);
         if (navigation != null) {
             navigation.setBackgroundColor(color);
         }
     }
-
-    public static View layoutView(Activity activity) {
-        ViewGroup group = activity.<ViewGroup>findViewById(R.id.immersive_content);
-        if (group != null) return group.getChildAt(0);
-        else return null;
+    public static void setNavigationBarColorResource(Activity activity, int colorRes) {
+        View navigation = activity.findViewById(R.id.immersive_navigation);
+        if (navigation != null) {
+            navigation.setBackgroundResource(colorRes);
+        }
     }
-
     public static boolean setStatusContentColor(Activity activity, MODE mode) {
         if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (mode == MODE.BLACK)
@@ -155,6 +160,11 @@ public class Immersive {
         } else {
             return false;
         }
+    }
+    public static View layoutView(Activity activity) {
+        ViewGroup group = activity.<ViewGroup>findViewById(R.id.immersive_content);
+        if (group != null) return group.getChildAt(0);
+        else return null;
     }
 
     public enum MODE {
