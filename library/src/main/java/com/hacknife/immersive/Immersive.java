@@ -1,6 +1,7 @@
 package com.hacknife.immersive;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.support.annotation.LayoutRes;
@@ -42,7 +43,6 @@ public class Immersive {
             activity.getWindow().addFlags(FLAG_TRANSLUCENT_NAVIGATION);
         }
         if (VERSION.SDK_INT >= 21) {
-            activity.getWindow().addFlags(SYSTEM_UI_FLAG_HIDE_NAVIGATION);
             activity.getWindow().addFlags(SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         }
     }
@@ -94,19 +94,19 @@ public class Immersive {
     }
 
 
-    public static void setContentBackgroundColor(Activity activity, int color ){
+    public static void setContentBackgroundColor(Activity activity, int color) {
         View content = activity.findViewById(R.id.immersive_content);
         if (content != null) {
             content.setBackgroundColor(color);
         }
     }
-    public static void setContentBackgroundColorResource(Activity activity, int colorRes){
+
+    public static void setContentBackgroundColorResource(Activity activity, int colorRes) {
         View content = activity.findViewById(R.id.immersive_content);
         if (content != null) {
             content.setBackgroundResource(colorRes);
         }
     }
-
 
 
     public static void setStatusBarColor(Activity activity, int color) {
@@ -116,30 +116,34 @@ public class Immersive {
         }
 
     }
+
     public static void setStatusBarColorResource(Activity activity, int colorRes) {
         View status = activity.findViewById(R.id.immersive_status);
         if (status != null) {
             status.setBackgroundResource(colorRes);
         }
     }
+
     public static void setNavigationBarColor(Activity activity, int color) {
         View navigation = activity.findViewById(R.id.immersive_navigation);
         if (navigation != null) {
             navigation.setBackgroundColor(color);
         }
     }
+
     public static void setNavigationBarColorResource(Activity activity, int colorRes) {
         View navigation = activity.findViewById(R.id.immersive_navigation);
         if (navigation != null) {
             navigation.setBackgroundResource(colorRes);
         }
     }
+
     public static boolean setStatusContentColor(Activity activity, MODE mode) {
         if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (mode == MODE.BLACK)
                 activity.getWindow()
                         .getDecorView()
-                        .setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR );
+                        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
             else if (mode == MODE.WHITE)
                 activity.getWindow()
@@ -150,6 +154,7 @@ public class Immersive {
             return false;
         }
     }
+
     public static boolean setNavigationContentColor(Activity activity, MODE mode) {
         if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (mode == MODE.BLACK)
@@ -161,6 +166,7 @@ public class Immersive {
             return false;
         }
     }
+
     public static View layoutView(Activity activity) {
         ViewGroup group = activity.<ViewGroup>findViewById(R.id.immersive_content);
         if (group != null) return group.getChildAt(0);

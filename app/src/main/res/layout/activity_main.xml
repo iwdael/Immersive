@@ -96,6 +96,16 @@
             android:layout_centerHorizontal="true"
             android:layout_width="200dp"
             android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/jump"
+            android:textSize="12sp"
+            android:text="JUMP"
+            android:layout_below="@id/btn_status_text_color"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
 </LinearLayout>

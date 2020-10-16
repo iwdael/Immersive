@@ -1,5 +1,6 @@
 package com.hacknife.demoimmersive;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -137,6 +138,15 @@ public class MainActivity extends AppCompatActivity {
                     Immersive.setNavigationContentColor(MainActivity.this, Immersive.MODE.WHITE);
                 }
                 key++;
+            }
+        });
+        Button jump = findViewById(R.id.jump);
+        jump.setOnClickListener(new View.OnClickListener() {
+            int key = 0;
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
             }
         });
     }
