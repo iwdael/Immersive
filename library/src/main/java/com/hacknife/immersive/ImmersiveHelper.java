@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -31,7 +32,7 @@ public class ImmersiveHelper {
         int widthPixels2 = outMetrics.widthPixels;
         int w = widthPixels - widthPixels2;
         int h = heightPixels - heightPixels2;
-        return !(w == 0 && h == 0 && getNavigationBarHeight(activity)==0);//竖屏和横屏两种情况。
+        return !(w == 0 && h == 0);//竖屏和横屏两种情况。
     }
 
     public static DisplayMetrics getScreenPix(Activity activity) {
@@ -57,11 +58,20 @@ public class ImmersiveHelper {
     }
 
     public static int getNavigationBarHeight(Context context) {
+        Activity activity = getActivity(context);
+        if (activity != null) {
+            if (!hasNavigationBarShow(activity)) return 0;
+        }
         return getSystemComponentDimen(context, "navigation_bar_height");
     }
 
     public static int getStatusBarHeight(Context context) {
         // 反射手机运行的类：android.R.dimen.status_bar_height.
         return getSystemComponentDimen(context, "status_bar_height");
+    }
+
+    public static Activity getActivity(Context context) {
+        if (context instanceof Activity) return (Activity) context;
+        return null;
     }
 }
