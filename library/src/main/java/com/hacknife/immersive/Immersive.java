@@ -1,24 +1,16 @@
 package com.hacknife.immersive;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.support.annotation.LayoutRes;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 
-import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 import static android.view.Window.FEATURE_NO_TITLE;
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
@@ -49,7 +41,14 @@ public class Immersive {
 
     public static void setContentView(Activity activity, @LayoutRes int layoutRes, int statusRes, int navigationRes, boolean statusEmbed, boolean navigationEmbed) {
         compatible(activity);
-        activity.setContentView(R.layout.activity_immersive);
+        Orientation orientation = ImmersiveHelper.getActivityOrientationForContext(activity);
+        if (orientation== Orientation._0 || orientation == Orientation._180){
+            activity.setContentView(R.layout.activity_immersive_vertical);
+        }else  if (orientation == Orientation._90){
+            activity.setContentView(R.layout.activity_immersive_horizontal_90);
+        } else {
+            activity.setContentView(R.layout.activity_immersive_horizontal_270);
+        }
         StatusView statusView = activity.findViewById(R.id.immersive_status);
         FrameLayout content = activity.findViewById(R.id.immersive_content);
         NavigationView navigationView = activity.findViewById(R.id.immersive_navigation);
