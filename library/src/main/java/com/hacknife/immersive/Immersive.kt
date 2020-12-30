@@ -18,6 +18,9 @@ import androidx.fragment.app.FragmentActivity
  */
 object Immersive {
     private val TAG = Immersive::class.java.name
+
+    private val stateMap = hashMapOf<String, State>()
+
     private fun compatible19(activity: FragmentActivity) {
         if (VERSION.SDK_INT >= 19 && VERSION.SDK_INT < 21) {
             activity.window.requestFeature(Window.FEATURE_NO_TITLE)
@@ -34,22 +37,22 @@ object Immersive {
             activity.window.statusBarColor = Color.TRANSPARENT
             activity.window.navigationBarColor = Color.TRANSPARENT
             activity.window?.decorView?.systemUiVisibility =
-                systemUiFlag(statusBarLight = true, navigationBarLight = true)
+                systemUiFlag(true, true)
+            stateMap.put(activity.hashCode().toString(), State(true, true))
         }
     }
 
-    private fun systemUiFlag(statusBarLight: Boolean, navigationBarLight: Boolean): Int {
-
+    private fun systemUiFlag(statusBarDark: Boolean, navigationBarDark: Boolean): Int {
         var flag = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
         when {
             VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-                if (statusBarLight) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                if (navigationBarLight) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                if (statusBarDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                if (navigationBarDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
             }
             VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                if (statusBarLight) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                if (statusBarDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
         }
         return flag
@@ -162,11 +165,14 @@ object Immersive {
     @JvmStatic
     fun setStatusContentColor(activity: Activity, mode: MODE): Boolean {
         return if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (mode == MODE.BLACK) activity.window
-                .decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR else if (mode == MODE.WHITE) activity.window
-                .decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            val navigationBar = stateMap[activity.hashCode().toString()]?.navigationBar ?: true
+            if (mode == MODE.WHITE) {
+                activity.window.decorView.systemUiVisibility = systemUiFlag(false, navigationBar)
+                stateMap[activity.hashCode().toString()]?.stateBar = false
+            } else {
+                activity.window.decorView.systemUiVisibility = systemUiFlag(true, navigationBar)
+                stateMap[activity.hashCode().toString()]?.stateBar = true
+            }
             true
         } else {
             false
@@ -176,8 +182,14 @@ object Immersive {
     @JvmStatic
     fun setNavigationContentColor(activity: Activity, mode: MODE): Boolean {
         return if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (mode == MODE.BLACK) activity.window.decorView.systemUiVisibility = activity.window.decorView.systemUiVisibility and  0x11111011
-            else  activity.window.decorView.systemUiVisibility = activity.window.decorView.systemUiVisibility or  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            val stateBar = stateMap[activity.hashCode().toString()]?.stateBar ?: true
+            if (mode == MODE.WHITE) {
+                activity.window.decorView.systemUiVisibility = systemUiFlag(stateBar, false)
+                stateMap[activity.hashCode().toString()]?.navigationBar = false
+            } else {
+                activity.window.decorView.systemUiVisibility = systemUiFlag(stateBar, true)
+                stateMap[activity.hashCode().toString()]?.navigationBar = true
+            }
             true
         } else {
             false
