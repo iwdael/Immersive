@@ -2,11 +2,12 @@ package com.hacknife.demoimmersive;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.hacknife.immersive.Immersive;
 
@@ -22,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Immersive.setContentView(this, R.layout.activity_main, R.color.blue, R.color.green, false, false);
-        Immersive.setStatusContentColor(MainActivity.this, Immersive.MODE.WHITE);
-        Immersive.setNavigationContentColor(MainActivity.this, Immersive.MODE.WHITE);
+//        Immersive.setStatusContentColor(MainActivity.this, Immersive.MODE.WHITE);
+//        Immersive.setNavigationContentColor(MainActivity.this, Immersive.MODE.WHITE);
         SeekBar pro_red = findViewById(R.id.pro_red);
         SeekBar pro_green = findViewById(R.id.pro_green);
         SeekBar pro_blue = findViewById(R.id.pro_blue);
