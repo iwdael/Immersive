@@ -24,15 +24,29 @@ object ImmersiveHelper {
         var outMetrics = DisplayMetrics()
         //获取整个屏幕的高度
         display.getRealMetrics(outMetrics)
-        val heightPixels = outMetrics.heightPixels
         val widthPixels = outMetrics.widthPixels
+        val heightPixels = outMetrics.heightPixels
         //获取内容展示部分的高度
         outMetrics = DisplayMetrics()
         display.getMetrics(outMetrics)
-        val heightPixels2 = outMetrics.heightPixels
         val widthPixels2 = outMetrics.widthPixels
+        val heightPixels2 = outMetrics.heightPixels
         val w = widthPixels - widthPixels2
         val h = heightPixels - heightPixels2
+        return !(w == 0 && h == 0) //竖屏和横屏两种情况。
+    }
+
+
+    fun hasNavigationBarShow(activity: Activity, displayWidth: Int, displayHeight: Int): Boolean {
+        val wm = activity.windowManager
+        val display = wm.defaultDisplay
+        var outMetrics = DisplayMetrics()
+        //获取整个屏幕的高度
+        display.getRealMetrics(outMetrics)
+        val widthPixels = outMetrics.widthPixels
+        val heightPixels = outMetrics.heightPixels
+        val w = widthPixels - displayWidth
+        val h = heightPixels - displayHeight
         return !(w == 0 && h == 0) //竖屏和横屏两种情况。
     }
 
@@ -65,6 +79,8 @@ object ImmersiveHelper {
     fun getNavigationBarHeight(context: Context): Int {
         val activity = getActivity(context)
         if (activity != null) {
+            val b = hasNavigationBarShow(activity)
+            Log.v("dzq", "hasNavigationBarShow：${b}")
             if (!hasNavigationBarShow(activity)) return 0
         }
         return getSystemComponentDimen(context, "navigation_bar_height")
@@ -87,16 +103,16 @@ object ImmersiveHelper {
                 ?: return Orientation._0
         return when (wm.defaultDisplay.rotation) {
             Surface.ROTATION_90 -> {
-                 Orientation._90
+                Orientation._90
             }
             Surface.ROTATION_180 -> {
-                 Orientation._180
+                Orientation._180
             }
             Surface.ROTATION_270 -> {
-                 Orientation._270
+                Orientation._270
             }
             else -> {
-                 Orientation._0
+                Orientation._0
             }
         }
     }

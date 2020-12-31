@@ -24,7 +24,7 @@ publish{
     userOrg = 'hacknife'
     groupId = 'com.hacknife'
     artifactId = 'immersive'
-    publishVersion = '1.1.8'
+    publishVersion = '1.1.9'
     desc = '一行代码实现沉浸式'
     website = 'https://github.com/hacknife/immersive'
 }

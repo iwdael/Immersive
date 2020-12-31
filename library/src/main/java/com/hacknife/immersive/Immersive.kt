@@ -4,11 +4,14 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Build.VERSION
+import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
+import com.hacknife.immersive.ImmersiveHelper.hasNavigationBarShow
 
 /**
  * author  : Hacknife
@@ -68,8 +71,8 @@ object Immersive {
         navigationEmbed: Boolean
     ) {
         compatible19(activity)
-        val orientation =
-            ImmersiveHelper.getActivityOrientationForContext(activity)
+        compatible21(activity)
+        val orientation = ImmersiveHelper.getActivityOrientationForContext(activity)
         if (orientation == Orientation._0 || orientation == Orientation._180) {
             activity.setContentView(R.layout.activity_immersive_vertical)
         } else if (orientation == Orientation._90) {
@@ -77,10 +80,17 @@ object Immersive {
         } else {
             activity.setContentView(R.layout.activity_immersive_horizontal_270)
         }
-        compatible21(activity)
+
         val statusView: StatusView = activity.findViewById(R.id.immersive_status)
         val content = activity.findViewById<FrameLayout>(R.id.immersive_content)
         val navigationView: NavigationView = activity.findViewById(R.id.immersive_navigation)
+        val rootView = activity.findViewById<LinearLayout>(R.id.immersive)
+        rootView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            if (!hasNavigationBarShow(activity, rootView.width, rootView.height)) {
+                navigationView.hide()
+                navigationView.requestLayout()
+            }
+        }
         statusView.setBackgroundResource(statusRes)
         navigationView.setBackgroundResource(navigationRes)
         if (statusEmbed) statusView.visibility = View.GONE
