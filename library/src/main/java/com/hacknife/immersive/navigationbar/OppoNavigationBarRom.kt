@@ -15,10 +15,12 @@ import com.hacknife.immersive.NavigationBarRom
  * version: 1.0
  */
 class OppoNavigationBarRom : NavigationBarRom {
-
+    companion object{
+        const val CONTENT_KEY = "hide_navigationbar_enable"
+    }
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
-        return Settings.Secure.getInt(activity.contentResolver, "hide_navigationbar_enable", 0) == 0
+        return Settings.Secure.getInt(activity.contentResolver, CONTENT_KEY, 0) == 0
     }
 
 }

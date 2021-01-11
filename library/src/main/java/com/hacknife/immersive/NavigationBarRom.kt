@@ -28,7 +28,7 @@ fun getNavigationBarRom(): NavigationBarRom {
         isHuawei() -> HuaweiNavigationBarRom()
 //        isNokia() -> NokiaNavigationBarRom()
         isOneplus() -> OnePlusNavigationBarRom()
-//        isOppo() -> OppoNavigationBarRom()
+        isOppo() -> OppoNavigationBarRom()
         isSamsung() -> SamsungNavigationBarRom()
 //        isSmartisan() -> SmartisanNavigationBarRom()
         isVivo() -> VivoNavigationBarRom()
