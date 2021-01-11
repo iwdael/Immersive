@@ -23,10 +23,6 @@ import java.lang.StringBuilder
  * version: 1.0
  */
 class OnePlusNavigationBarRom : NavigationBarRom {
-    init {
-        Log.v(TAG, "OnePlusNavigationBarRom")
-    }
-
     companion object {
         const val CONTENT_KEY = "op_navigation_bar_type"
     }

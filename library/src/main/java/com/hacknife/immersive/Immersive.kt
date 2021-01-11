@@ -16,8 +16,9 @@ import androidx.fragment.app.FragmentActivity
  * github  : http://github.com/hacknife
  * project : Immersive
  */
+val TAG = Immersive::class.java.name
+
 object Immersive {
-    private val TAG = Immersive::class.java.name
 
     private val stateMap = hashMapOf<String, State>()
 

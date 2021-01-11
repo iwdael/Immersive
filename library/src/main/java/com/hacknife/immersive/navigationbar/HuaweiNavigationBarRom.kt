@@ -20,10 +20,6 @@ class HuaweiNavigationBarRom : NavigationBarRom {
         const val CONTENT_KEY = "navigationbar_is_min"
     }
 
-    init {
-        Log.v(TAG, "HuaweiNavigationBarRom")
-    }
-
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
         return Settings.Global.getInt(activity.contentResolver, CONTENT_KEY, 0) == 0

@@ -20,10 +20,6 @@ class VivoNavigationBarRom : NavigationBarRom {
         const val CONTENT_KEY = "navigation_gesture_on"
     }
 
-    init {
-        Log.v(TAG, "VivoNavigationBarRom")
-    }
-
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
         return Settings.Secure.getInt(activity.contentResolver, CONTENT_KEY, 0) == 0

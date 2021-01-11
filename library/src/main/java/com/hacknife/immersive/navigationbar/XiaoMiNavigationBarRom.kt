@@ -20,10 +20,6 @@ class XiaoMiNavigationBarRom : NavigationBarRom {
         const val CONTENT_KEY = "force_fsg_nav_bar"
     }
 
-    init {
-        Log.v(TAG, "XiaoMiNavigationBarRom")
-    }
-
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
         return Settings.Global.getInt(activity.contentResolver, CONTENT_KEY, 0) == 0

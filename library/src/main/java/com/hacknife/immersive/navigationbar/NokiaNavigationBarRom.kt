@@ -15,14 +15,20 @@ import com.hacknife.immersive.TAG
  * desc   : 小米
  * version: 1.0
  */
-class SamsungNavigationBarRom : NavigationBarRom {
-    companion object {
-        const val CONTENT_KEY = "navigation_bar_gesture_while_hidden"
-    }
-
+class NokiaNavigationBarRom : NavigationBarRom {
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
-        return Settings.Global.getInt(activity.contentResolver, CONTENT_KEY, 0) == 0
+        val result = (Settings.Secure.getInt(
+            activity.contentResolver,
+            "swipe_up_to_switch_apps_enabled",
+            0
+        ) != 0
+                || Settings.System.getInt(
+            activity.contentResolver,
+            "navigation_bar_can_hiden",
+            0
+        ) != 0)
+        return !result
     }
 
 }

@@ -5,13 +5,14 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentActivity
+import com.hacknife.immersive.NavigationBarRom
+import com.hacknife.immersive.TAG
 
 /**
  * author : 段泽全(hacknife)
  * e-mail : hacknife@outlook.com
  * time   : 2019/8/5
- * desc   : MVVM
+ * desc   : other
  * version: 1.0
  */
 class OtherNavigationBarRom : NavigationBarRom {

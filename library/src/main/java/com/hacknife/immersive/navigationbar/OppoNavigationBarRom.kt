@@ -5,19 +5,21 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentActivity
+import com.hacknife.immersive.NavigationBarRom
+import com.hacknife.immersive.TAG
 
 /**
- * author : 段泽全(hacknife)
+ * author : hacknife
  * e-mail : hacknife@outlook.com
  * time   : 2019/8/5
- * desc   : MVVM
+ * desc   : oppo
  * version: 1.0
  */
-class MiuiNavigationBarRom : NavigationBarRom {
+class OppoNavigationBarRom : NavigationBarRom {
+
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
-        return Settings.Global.getInt(activity.contentResolver, "force_fsg_nav_bar", 0) == 0
+        return Settings.Secure.getInt(activity.contentResolver, "hide_navigationbar_enable", 0) == 0
     }
 
 }

@@ -1,15 +1,12 @@
 package com.hacknife.immersive
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.pm.ActivityInfo
-import android.os.Build
-import android.util.DisplayMetrics
+import android.content.res.Resources
 import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
-import androidx.annotation.RequiresApi
-import com.hacknife.immersive.navigationbar.navigationHelper
 
 /**
  * author  : Hacknife
@@ -39,6 +36,39 @@ object ImmersiveHelper {
         return statusHeight
     }
 
+
+    @JvmStatic
+    fun hasNavigationBar(): Boolean {
+        var has = false
+
+        val resources = Resources.getSystem()
+        val id = resources.getIdentifier("config_showNavigationBar", "bool", "android")
+        if (id > 0) {
+            has = resources.getBoolean(id)
+            Log.v(TAG, "=======>>${has}==>>${id}")
+        } else {
+            Log.v(TAG, "===${id}====>>${has}")
+        }
+
+        try {
+            val systemPropertiesClass =
+                Class.forName("android.os.SystemProperties")
+            val m =
+                systemPropertiesClass.getMethod("get", String::class.java)
+            val navBarOverride =
+                m.invoke(systemPropertiesClass, "qemu.hw.mainkeys") as String
+            if ("1" == navBarOverride) {
+                has = false
+            } else if ("0" == navBarOverride) {
+                has = true
+            }
+            Log.v(TAG, "navBarOverride:$navBarOverride")
+        } catch (e: java.lang.Exception) {
+            Log.v(TAG, "==>>$e")
+        }
+        return has
+    }
+
     @JvmStatic
     fun getNavigationBarHeight(context: Context): Int {
         val activity = getActivity(context)
@@ -65,19 +95,35 @@ object ImmersiveHelper {
                 ?: return Orientation._0
         return when (wm.defaultDisplay.rotation) {
             Surface.ROTATION_90 -> {
-                 Orientation._90
+                Orientation._90
             }
             Surface.ROTATION_180 -> {
-                 Orientation._180
+                Orientation._180
             }
             Surface.ROTATION_270 -> {
-                 Orientation._270
+                Orientation._270
             }
             else -> {
-                 Orientation._0
+                Orientation._0
             }
         }
     }
 
 
+}
+
+
+fun getSystemProperty(key: String, defaultValue: String): String {
+    try {
+        val clz = Class.forName("android.os.SystemProperties")
+        val method = clz.getMethod(
+            "get",
+            String::class.java,
+            String::class.java
+        )
+        return method.invoke(clz, key, defaultValue) as String
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+    }
+    return defaultValue
 }
