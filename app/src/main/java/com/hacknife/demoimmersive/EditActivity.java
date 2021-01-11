@@ -5,14 +5,17 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hacknife.immersive.Immersive;
+import com.hacknife.immersive.ImmersiveKt;
+import com.hacknife.immersive.MODE;
+
 
 public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(  Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Immersive.setContentView(this, R.layout.activity_edit, R.color.test_one, R.color.test_one, false, false);
-//        Immersive.setNavigationContentColor(this, Immersive.MODE.BLACK);
-//        Immersive.setStatusContentColor(this, Immersive.MODE.WHITE);
+        ImmersiveKt.setContentView( this, R.layout.activity_edit, R.color.test_one, R.color.test_one, false, false);
+        ImmersiveKt.setNavigationContentColor(this, MODE.BLACK);
+        ImmersiveKt.setStatusContentColor(this, MODE.WHITE);
+
     }
 }

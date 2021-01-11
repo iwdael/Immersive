@@ -37,37 +37,7 @@ object ImmersiveHelper {
     }
 
 
-    @JvmStatic
-    fun hasNavigationBar(): Boolean {
-        var has = false
 
-        val resources = Resources.getSystem()
-        val id = resources.getIdentifier("config_showNavigationBar", "bool", "android")
-        if (id > 0) {
-            has = resources.getBoolean(id)
-            Log.v(TAG, "=======>>${has}==>>${id}")
-        } else {
-            Log.v(TAG, "===${id}====>>${has}")
-        }
-
-        try {
-            val systemPropertiesClass =
-                Class.forName("android.os.SystemProperties")
-            val m =
-                systemPropertiesClass.getMethod("get", String::class.java)
-            val navBarOverride =
-                m.invoke(systemPropertiesClass, "qemu.hw.mainkeys") as String
-            if ("1" == navBarOverride) {
-                has = false
-            } else if ("0" == navBarOverride) {
-                has = true
-            }
-            Log.v(TAG, "navBarOverride:$navBarOverride")
-        } catch (e: java.lang.Exception) {
-            Log.v(TAG, "==>>$e")
-        }
-        return has
-    }
 
     @JvmStatic
     fun getNavigationBarHeight(context: Context): Int {
@@ -110,20 +80,4 @@ object ImmersiveHelper {
     }
 
 
-}
-
-
-fun getSystemProperty(key: String, defaultValue: String): String {
-    try {
-        val clz = Class.forName("android.os.SystemProperties")
-        val method = clz.getMethod(
-            "get",
-            String::class.java,
-            String::class.java
-        )
-        return method.invoke(clz, key, defaultValue) as String
-    } catch (e: java.lang.Exception) {
-        e.printStackTrace()
-    }
-    return defaultValue
 }

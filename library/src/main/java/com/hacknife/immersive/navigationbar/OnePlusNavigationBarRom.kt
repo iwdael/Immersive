@@ -6,13 +6,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
-import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import com.hacknife.immersive.NavigationBarRom
-import com.hacknife.immersive.TAG
-import com.hacknife.immersive.getSystemProperty
-import java.lang.StringBuilder
 
 
 /**

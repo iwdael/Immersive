@@ -6,7 +6,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.hacknife.immersive.NavigationBarRom
-import com.hacknife.immersive.TAG
 
 /**
  * author : 段泽全(hacknife)
