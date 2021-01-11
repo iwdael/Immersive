@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
      * @param statusEmbed 是否隐藏状态栏
      * @param navigationEmbed 是否隐藏导航栏
      */
-    Immersive.setContentView(Activity activity, @LayoutRes int layoutRes, int statusRes, int navigationRes, boolean statusEmbed, boolean navigationEmbed)
+    ImmersiveKt.setContentView(Activity activity, @LayoutRes int layoutRes, int statusRes, int navigationRes, boolean statusEmbed, boolean navigationEmbed)
 ```
 动态修改状态栏颜色，前提是必须使用Immersive.setContentView设置布局。
 ```Java
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 ```Java
 	dependencies {
                 ...
-	        implementation 'com.hacknife:immersive:1.1.0'
+	        implementation 'com.hacknife:immersive:1.2.2'
 	}
 ```
 
