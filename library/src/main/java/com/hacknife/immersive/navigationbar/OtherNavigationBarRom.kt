@@ -14,6 +14,7 @@ import com.hacknife.immersive.NavigationBarRom
  * desc   : other
  * version: 1.0
  */
+val otherNavigationBarRom by lazy { OtherNavigationBarRom() }
 class OtherNavigationBarRom : NavigationBarRom {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)

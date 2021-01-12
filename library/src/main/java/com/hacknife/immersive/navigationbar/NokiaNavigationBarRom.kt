@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.hacknife.immersive.NavigationBarRom
+import java.lang.Exception
 
 /**
  * author : hacknife
@@ -15,19 +16,17 @@ import com.hacknife.immersive.NavigationBarRom
  * version: 1.0
  */
 class NokiaNavigationBarRom : NavigationBarRom {
+    companion object {
+        private const val CONTENT_KEY = ""
+    }
+
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
-        val result = (Settings.Secure.getInt(
-            activity.contentResolver,
-            "swipe_up_to_switch_apps_enabled",
-            0
-        ) != 0
-                || Settings.System.getInt(
-            activity.contentResolver,
-            "navigation_bar_can_hiden",
-            0
-        ) != 0)
-        return !result
+        return try {
+            Settings.Global.getInt(activity.contentResolver, CONTENT_KEY) == 0
+        } catch (e: Exception) {
+            otherNavigationBarRom.navigationBarExist(activity)
+        }
     }
 
 }

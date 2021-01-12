@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.hacknife.immersive.NavigationBarRom
+import java.lang.Exception
 
 /**
  * author : 段泽全(hacknife)
@@ -16,11 +17,15 @@ import com.hacknife.immersive.NavigationBarRom
  */
 class HuaweiNavigationBarRom : NavigationBarRom {
     companion object {
-        const val CONTENT_KEY = "navigationbar_is_min"
+        private const val CONTENT_KEY = "navigationbar_is_min"
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
-        return Settings.Global.getInt(activity.contentResolver, CONTENT_KEY, 0) == 0
+        return try {
+            Settings.Global.getInt(activity.contentResolver, CONTENT_KEY) == 0
+        } catch (e: Exception) {
+            otherNavigationBarRom.navigationBarExist(activity)
+        }
     }
 }

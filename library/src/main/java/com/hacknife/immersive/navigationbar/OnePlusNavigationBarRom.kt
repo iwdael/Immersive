@@ -8,6 +8,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.hacknife.immersive.NavigationBarRom
+import java.lang.Exception
 
 
 /**
@@ -19,12 +20,16 @@ import com.hacknife.immersive.NavigationBarRom
  */
 class OnePlusNavigationBarRom : NavigationBarRom {
     companion object {
-        const val CONTENT_KEY = "op_navigation_bar_type"
+        private const val CONTENT_KEY = "op_navigation_bar_type"
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
-        return Settings.System.getInt(activity.contentResolver, CONTENT_KEY, 3) != 3
+        return try {
+            Settings.System.getInt(activity.contentResolver, CONTENT_KEY) != 3
+        } catch (e: Exception) {
+            otherNavigationBarRom.navigationBarExist(activity)
+        }
     }
 
 

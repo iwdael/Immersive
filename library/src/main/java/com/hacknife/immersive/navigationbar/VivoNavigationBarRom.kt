@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.hacknife.immersive.NavigationBarRom
+import java.lang.Exception
 
 /**
  * author : hacknife
@@ -16,12 +17,16 @@ import com.hacknife.immersive.NavigationBarRom
  */
 class VivoNavigationBarRom : NavigationBarRom {
     companion object {
-        const val CONTENT_KEY = "navigation_gesture_on"
+        private const val CONTENT_KEY = "navigation_gesture_on"
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
-        return Settings.Secure.getInt(activity.contentResolver, CONTENT_KEY, 0) == 0
+        return try {
+            Settings.Secure.getInt(activity.contentResolver, CONTENT_KEY) == 0
+        } catch (e: Exception) {
+            otherNavigationBarRom.navigationBarExist(activity)
+        }
     }
 
 }
