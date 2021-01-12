@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 ```Java
 	dependencies {
                 ...
-	        implementation 'com.hacknife:immersive:1.2.2'
+	        implementation 'com.hacknife:immersive:1.2.3'
 	}
 ```
 
