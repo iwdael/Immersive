@@ -189,6 +189,12 @@ fun Activity.setNavigationContentColor(mode: MODE): Boolean {
         false
     }
 }
+fun Activity.setOnSoftKeyBoardChangeListener(
+    onSoftKeyBoardChangeListener: SoftKeyBoardKit.OnSoftKeyBoardChangeListener
+) {
+    val softKeyBoardListener = SoftKeyBoardKit(this)
+    softKeyBoardListener.setOnSoftKeyBoardChangeListener(onSoftKeyBoardChangeListener)
+}
 
 fun Activity.rootView(): View? {
     val group = findViewById<ViewGroup>(R.id.immersive_content)
