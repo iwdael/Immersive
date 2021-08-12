@@ -1,0 +1,5 @@
+adb shell getprop ro.product.brand //查看品牌
+
+adb shell settings list global  //查看数据库，寻找是否隐藏 navigatiuon
+adb shell settings list system
+adb shell settings list secure

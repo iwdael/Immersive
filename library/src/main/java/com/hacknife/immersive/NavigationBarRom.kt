@@ -33,6 +33,7 @@ fun getNavigationBarRom(): NavigationBarRom {
 //        isSmartisan() -> SmartisanNavigationBarRom()
         isVivo() -> VivoNavigationBarRom()
         isXiaomi() -> XiaoMiNavigationBarRom()
+        isBlackShark() -> BlackSharkNavigationBarRom()
         else -> OtherNavigationBarRom()
     }
 }

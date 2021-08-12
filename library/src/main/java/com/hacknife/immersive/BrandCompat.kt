@@ -48,3 +48,7 @@ fun isNokia(): Boolean {
 fun isGoogle(): Boolean {
     return BRAND.contains("google")
 }
+
+fun isBlackShark(): Boolean {
+    return BRAND.contains("blackshark")
+}
