@@ -1,8 +1,8 @@
 # Immersive
-[![](https://img.shields.io/badge/platform-android-orange.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/language-java-yellow.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/Jcenter-1.1.0-brightgreen.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://github.com/hacknife) [![](https://img.shields.io/badge/api-19+-green.svg)](https://github.com/hacknife)<br/><br/>
+[![](https://img.shields.io/badge/platform-android-orange.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/language-java-yellow.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/Jcenter-1.1.0-brightgreen.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/api-19+-green.svg)](https://github.com/iwdael)<br/><br/>
 一行代码实现沉浸式，适配android4.4到8.0+，沉浸式前所未有的简单。
 </br></br>
-![Image Text](https://github.com/hacknife/immersive/blob/master/immersive.gif)
+![Image Text](https://github.com/iwdael/immersive/blob/master/immersive.gif)
 ## 代码示例
 ```Java
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 ```Java
 	dependencies {
                 ...
-	        implementation 'com.hacknife:immersive:1.2.3'
+	        implementation 'com.iwdael:immersive:1.2.3'
 	}
 ```
 
@@ -57,4 +57,4 @@ public class MainActivity extends AppCompatActivity {
 ## 感谢浏览
 如果你有任何疑问，请加入QQ群，我将竭诚为你解答。欢迎Star和Fork本仓库，当然也欢迎你关注我。
 <br>
-![Image Text](https://github.com/hacknife/CarouselBanner/blob/master/qq_group.png)
+![Image Text](https://github.com/iwdael/CarouselBanner/blob/master/qq_group.png)
