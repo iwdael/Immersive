@@ -1,5 +1,5 @@
 # Immersive
-[![](https://img.shields.io/badge/platform-android-orange.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/language-java-yellow.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/Jcenter-1.1.0-brightgreen.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/api-19+-green.svg)](https://github.com/iwdael)<br/><br/>
+[![](https://img.shields.io/badge/platform-android-orange.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/language-java-yellow.svg)](https://github.com/iwdael) [![](https://jitpack.io/v/iwdael/immersive.svg)](https://jitpack.io/#iwdael/immersive) [![](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/license-apache--2.0-green.svg)](https://github.com/iwdael) [![](https://img.shields.io/badge/api-19+-green.svg)](https://github.com/iwdael)<br/><br/>
 一行代码实现沉浸式，适配android4.4到8.0+，沉浸式前所未有的简单。
 </br></br>
 ![Image Text](https://github.com/iwdael/immersive/blob/master/immersive.gif)
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 ```Java
 	dependencies {
                 ...
-	        implementation 'com.iwdael:immersive:1.2.3'
+	        implementation 'com.iwdael:immersive:$version'
 	}
 ```
 
