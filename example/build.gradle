@@ -1,12 +1,13 @@
 apply from: './../config.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     buildToolsVersion buidConfig.buildToolsVersion
     compileSdkVersion buidConfig.compileSdkVersion
+
     defaultConfig {
         applicationId "com.iwdael.immersive.example"
         minSdkVersion buidConfig.minSdkVersion
@@ -15,13 +16,10 @@ android {
         versionName buidConfig.versionName
     }
 }
-
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(path: ':immersive')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation dependent.kotlinJdk7
+    implementation dependent.appcompat
+    implementation dependent.constraintlayout
 
 }
