@@ -14,6 +14,6 @@ android {
 }
 
 dependencies {
-    compileOnly dependent.appcompat
     implementation dependent.kotlinJdk7
+    compileOnly dependent.appcompat
 }
