@@ -2,7 +2,6 @@ apply from: './../config.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
 android {
     buildToolsVersion buidConfig.buildToolsVersion
     compileSdkVersion buidConfig.compileSdkVersion
@@ -15,10 +14,10 @@ android {
         versionName buidConfig.versionName
     }
 }
+
 dependencies {
-    implementation project(path: ':immersive')
     implementation dependent.kotlinJdk7
     implementation dependent.appcompat
     implementation dependent.constraintlayout
-
+    api project(path: ':immersive')
 }

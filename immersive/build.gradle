@@ -1,8 +1,7 @@
 apply from: './../config.gradle'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'maven'
+apply plugin: 'kotlin-android-extensions'
 android {
     buildToolsVersion buidConfig.buildToolsVersion
     compileSdkVersion buidConfig.compileSdkVersion
@@ -13,8 +12,8 @@ android {
         versionName buidConfig.versionName
     }
 }
+
 dependencies {
     compileOnly dependent.appcompat
     implementation dependent.kotlinJdk7
 }
-
