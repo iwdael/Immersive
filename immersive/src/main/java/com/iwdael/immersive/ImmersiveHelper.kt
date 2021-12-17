@@ -18,18 +18,9 @@ object ImmersiveHelper {
         context: Context,
         dimenName: String
     ): Int {
-        // 反射手机运行的类：android.R.dimen.status_bar_height.
         var statusHeight = 0
         try {
-//            val clazz = Class.forName("com.android.internal.R\$dimen")
-//            val r = clazz.newInstance()
-//            val dimenNameFiled = clazz.getField(dimenName)
-//            val heightStr = dimenNameFiled.get(r)?.toString() ?: "0"
-//            val height = heightStr.toInt()
-
-            val height =
-                context.resources.getIdentifier(dimenName, "dimen", "android")
-            //dp--->px
+            val height = context.resources.getIdentifier(dimenName, "dimen", "android")
             statusHeight = context.resources.getDimensionPixelSize(height)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -49,7 +40,6 @@ object ImmersiveHelper {
 
     @JvmStatic
     fun getStatusBarHeight(context: Context): Int {
-        // 反射手机运行的类：android.R.dimen.status_bar_height.
         return getSystemComponentDimen(context, "status_bar_height")
     }
 
