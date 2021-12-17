@@ -2,7 +2,7 @@ apply from: './../config.gradle'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
-
+apply plugin: 'maven'
 android {
     buildToolsVersion buidConfig.buildToolsVersion
     compileSdkVersion buidConfig.compileSdkVersion
