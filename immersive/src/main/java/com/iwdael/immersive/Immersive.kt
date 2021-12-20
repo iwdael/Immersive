@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Build.VERSION
+import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
@@ -20,7 +21,7 @@ import androidx.fragment.app.FragmentActivity
  */
 
 
-private val stateMap = hashMapOf<String, State>()
+val immersiveStates = hashMapOf<String, ImmersiveState>()
 
 private fun compatible19(activity: FragmentActivity) {
     if (VERSION.SDK_INT >= 19 && VERSION.SDK_INT < 21) {
@@ -38,27 +39,93 @@ private fun compatible21(activity: FragmentActivity) {
         activity.window.statusBarColor = Color.TRANSPARENT
         activity.window.navigationBarColor = Color.TRANSPARENT
         activity.window?.decorView?.systemUiVisibility =
-            systemUiFlag(true, true)
-        stateMap.put(activity.hashCode().toString(), State(true, true))
+            systemUiFlag(
+                immersiveStates[activity.hashCode().toString()]?.statusBarContentIsDark ?: true,
+                immersiveStates[activity.hashCode().toString()]?.navigationBarContentIsDark ?: true
+            )
     }
 }
 
-private fun systemUiFlag(statusBarDark: Boolean, navigationBarDark: Boolean): Int {
-    var flag = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+private fun systemUiFlag(
+    statusBarContentIsDark: Boolean,
+    navigationBarContentIsDark: Boolean
+): Int {
+    var flag = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
     when {
         VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-            if (statusBarDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            if (navigationBarDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            if (statusBarContentIsDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            if (navigationBarContentIsDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
         VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-            if (statusBarDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            if (statusBarContentIsDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
     return flag
 }
 
+
+fun Activity.attachContentView(
+    @LayoutRes layoutRes: Int,
+    statusEmbed: Boolean,
+    navigationEmbed: Boolean
+) {
+    when (immersiveStates[this.hashCode().toString()]!!.orientation) {
+        Orientation.ORIENTATION_0, Orientation.ORIENTATION_180 -> {
+            this.setContentView(
+                LayoutInflater.from(this).inflate(layoutRes, null)
+                    .apply { id = R.id.immersive_content },
+                createContentViewLayoutParamsVertical(statusEmbed, navigationEmbed)
+            )
+            this.addContentView(
+                StatusView(this, null, 0, true)
+                    .apply { id = R.id.immersive_status },
+                createStatusViewLayoutParamsVertical()
+            )
+            this.addContentView(
+                NavigationView(this, null, 0, true)
+                    .apply { id = R.id.immersive_navigation },
+                createNavigationViewLayoutParamsVertical()
+            )
+        }
+        Orientation.ORIENTATION_90 -> {
+            this.setContentView(
+                LayoutInflater.from(this).inflate(layoutRes, null)
+                    .apply { id = R.id.immersive_content },
+                createContentViewLayoutParamsAngle90(statusEmbed, navigationEmbed)
+            )
+            this.addContentView(
+                StatusView(this, null, 0, true)
+                    .apply { id = R.id.immersive_status },
+                createStatusViewLayoutParamsAngle90()
+            )
+            this.addContentView(
+                NavigationView(this, null, 0, true)
+                    .apply { id = R.id.immersive_navigation },
+                createNavigationViewLayoutParamsAngle90()
+            )
+        }
+        Orientation.ORIENTATION_270 -> {
+            this.setContentView(
+                LayoutInflater.from(this).inflate(layoutRes, null)
+                    .apply { id = R.id.immersive_content },
+                createContentViewLayoutParamsAngle270(statusEmbed, navigationEmbed)
+            )
+            this.addContentView(
+                StatusView(this, null, 0, true)
+                    .apply { id = R.id.immersive_status },
+                createStatusViewLayoutParamsAngle270()
+            )
+            this.addContentView(
+                NavigationView(this, null, 0, true)
+                    .apply { id = R.id.immersive_navigation },
+                createNavigationViewLayoutParamsAngle270()
+            )
+        }
+    }
+
+}
 
 fun AppCompatActivity.setContentView(
     @LayoutRes layoutRes: Int,
@@ -67,61 +134,55 @@ fun AppCompatActivity.setContentView(
     statusEmbed: Boolean,
     navigationEmbed: Boolean
 ) {
+    registerImmersiveDisplayListener()
     compatible19(this)
-    val orientation =
-        ImmersiveHelper.getActivityOrientationForContext(this)
-    if (orientation == Orientation._0 || orientation == Orientation._180) {
-        this.setContentView(R.layout.activity_immersive_vertical)
-    } else if (orientation == Orientation._90) {
-        this.setContentView(R.layout.activity_immersive_horizontal_90)
-    } else {
-        this.setContentView(R.layout.activity_immersive_horizontal_270)
-    }
+    attachContentView(layoutRes, statusEmbed, navigationEmbed)
     compatible21(this)
     val statusView: StatusView = this.findViewById(R.id.immersive_status)
-    val content = this.findViewById<FrameLayout>(R.id.immersive_content)
     val navigationView: NavigationView = this.findViewById(R.id.immersive_navigation)
     statusView.setBackgroundResource(statusRes)
     navigationView.setBackgroundResource(navigationRes)
     if (statusEmbed) statusView.visibility = View.GONE
     if (navigationEmbed) navigationView.visibility = View.GONE
-    content.addView(LayoutInflater.from(this).inflate(layoutRes, null))
-}
-
-
-fun Activity.hideStatus() {
-    val statusView: StatusView? = findViewById(R.id.immersive_status)
-    if (statusView != null) statusView.visibility = View.GONE
 }
 
 
 fun Activity.isShowOfStatus(): Boolean {
-    val statusView: StatusView? = findViewById(R.id.immersive_status)
-    return if (statusView != null) statusView.visibility == View.VISIBLE else false
+    return findViewById<View>(R.id.immersive_status)?.visibility == View.VISIBLE
 }
 
 
 fun Activity.isShowOfNavigation(): Boolean {
-    val navigationView: NavigationView? = findViewById(R.id.immersive_navigation)
-    return if (navigationView != null) navigationView.visibility == View.VISIBLE else false
+    return findViewById<View>(R.id.immersive_navigation)?.visibility == View.VISIBLE
 }
 
 
 fun Activity.showStatus() {
-    val statusView: StatusView? = findViewById(R.id.immersive_status)
-    if (statusView != null) statusView.visibility = View.VISIBLE
+    refreshContentLayoutParams(
+        false,
+        findViewById<View>(R.id.immersive_navigation)?.visibility == View.GONE
+    )
 }
 
-
-fun Activity.hideNavigation() {
-    val navigationView: NavigationView? = findViewById(R.id.immersive_navigation)
-    if (navigationView != null) navigationView.visibility = View.GONE
+fun Activity.hideStatus() {
+    refreshContentLayoutParams(
+        true,
+        findViewById<View>(R.id.immersive_navigation)?.visibility == View.GONE
+    )
 }
-
 
 fun Activity.showNavigation() {
-    val navigationView: NavigationView? = findViewById(R.id.immersive_navigation)
-    if (navigationView != null) navigationView.visibility = View.VISIBLE
+    refreshContentLayoutParams(
+        findViewById<View>(R.id.immersive_status)?.visibility == View.GONE,
+        false
+    )
+}
+
+fun Activity.hideNavigation() {
+    refreshContentLayoutParams(
+        findViewById<View>(R.id.immersive_status)?.visibility == View.GONE,
+        true
+    )
 }
 
 fun Activity.setContentBackgroundColor(@ColorInt color: Int) {
@@ -159,13 +220,14 @@ fun Activity.setNavigationBarColorResource(@ColorRes colorRes: Int) {
 
 fun Activity.setStatusContentColor(mode: MODE): Boolean {
     return if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val navigationBar = stateMap[this.hashCode().toString()]?.navigationBar ?: true
+        val navigationBar =
+            immersiveStates[this.hashCode().toString()]?.navigationBarContentIsDark ?: true
         if (mode == MODE.WHITE) {
             this.window.decorView.systemUiVisibility = systemUiFlag(false, navigationBar)
-            stateMap[this.hashCode().toString()]?.stateBar = false
+            immersiveStates[this.hashCode().toString()]?.statusBarContentIsDark = false
         } else {
             this.window.decorView.systemUiVisibility = systemUiFlag(true, navigationBar)
-            stateMap[this.hashCode().toString()]?.stateBar = true
+            immersiveStates[this.hashCode().toString()]?.statusBarContentIsDark = true
         }
         true
     } else {
@@ -176,19 +238,20 @@ fun Activity.setStatusContentColor(mode: MODE): Boolean {
 
 fun Activity.setNavigationContentColor(mode: MODE): Boolean {
     return if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val stateBar = stateMap[this.hashCode().toString()]?.stateBar ?: true
+        val stateBar = immersiveStates[this.hashCode().toString()]?.statusBarContentIsDark ?: true
         if (mode == MODE.WHITE) {
             this.window.decorView.systemUiVisibility = systemUiFlag(stateBar, false)
-            stateMap[this.hashCode().toString()]?.navigationBar = false
+            immersiveStates[this.hashCode().toString()]?.navigationBarContentIsDark = false
         } else {
             this.window.decorView.systemUiVisibility = systemUiFlag(stateBar, true)
-            stateMap[this.hashCode().toString()]?.navigationBar = true
+            immersiveStates[this.hashCode().toString()]?.navigationBarContentIsDark = true
         }
         true
     } else {
         false
     }
 }
+
 fun Activity.setOnSoftKeyBoardChangeListener(
     onSoftKeyBoardChangeListener: SoftKeyBoardKit.OnSoftKeyBoardChangeListener
 ) {
@@ -196,9 +259,8 @@ fun Activity.setOnSoftKeyBoardChangeListener(
     softKeyBoardListener.setOnSoftKeyBoardChangeListener(onSoftKeyBoardChangeListener)
 }
 
-fun Activity.rootView(): View? {
-    val group = findViewById<ViewGroup>(R.id.immersive_content)
-    return group?.getChildAt(0)
+fun Activity.immersiveContentView(): ViewGroup? {
+    return findViewById<ViewGroup>(R.id.immersive_content)
 }
 
 enum class MODE {

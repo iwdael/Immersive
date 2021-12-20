@@ -1,9 +1,15 @@
 package com.iwdael.immersive.example
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
+import android.hardware.display.DisplayManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -17,20 +23,19 @@ class MainActivity : AppCompatActivity() {
     private var alpha = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.v("dzq", "onCreate")
         setContentView(
             R.layout.activity_main,
             R.color.blue,
             R.color.green,
-            false,
-            false
+            statusEmbed = false,
+            navigationEmbed = false
         )
-        //        Immersive.setStatusContentColor(MainActivity.this, Immersive.MODE.WHITE);
-//        Immersive.setNavigationContentColor(MainActivity.this, Immersive.MODE.WHITE);
-        val pro_red = findViewById<SeekBar>(R.id.pro_red)
-        val pro_green = findViewById<SeekBar>(R.id.pro_green)
-        val pro_blue = findViewById<SeekBar>(R.id.pro_blue)
-        val pro_alpha = findViewById<SeekBar>(R.id.pro_alpha)
-        pro_red.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        val proRed = findViewById<SeekBar>(R.id.pro_red)
+        val proGreen = findViewById<SeekBar>(R.id.pro_green)
+        val proBlue = findViewById<SeekBar>(R.id.pro_blue)
+        val proAlpha = findViewById<SeekBar>(R.id.pro_alpha)
+        proRed.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(
                 seekBar: SeekBar,
                 progress: Int,
@@ -44,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        pro_green.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        proGreen.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(
                 seekBar: SeekBar,
                 progress: Int,
@@ -58,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        pro_blue.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        proBlue.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(
                 seekBar: SeekBar,
                 progress: Int,
@@ -72,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-        pro_alpha.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        proAlpha.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(
                 seekBar: SeekBar,
                 progress: Int,
@@ -90,13 +95,12 @@ class MainActivity : AppCompatActivity() {
         status.setOnClickListener {
             if (isShowOfStatus()) hideStatus() else showStatus()
         }
-        val navigation =
-            findViewById<Button>(R.id.btn_navigation)
+        val navigation = findViewById<Button>(R.id.btn_navigation)
         navigation.setOnClickListener {
             if (isShowOfNavigation()) hideNavigation() else showNavigation()
         }
-        val btn_status_text_color = findViewById<Button>(R.id.btn_status_text_color)
-        btn_status_text_color.setOnClickListener(object : View.OnClickListener {
+        val btnStatusTextColor = findViewById<Button>(R.id.btn_status_text_color)
+        btnStatusTextColor.setOnClickListener(object : View.OnClickListener {
             var key = 0
             override fun onClick(v: View) {
                 if (key % 2 == 0) {
@@ -110,11 +114,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
         val jump = findViewById<Button>(R.id.jump)
-        jump.setOnClickListener(object : View.OnClickListener {
-            var key = 0
-            override fun onClick(v: View) {
-                startActivity(Intent(this@MainActivity, MainActivity::class.java))
-            }
-        })
+        jump.setOnClickListener {
+            startActivity(Intent(this@MainActivity, MainActivity::class.java))
+        }
+        setStatusContentColor(MODE.WHITE)
+        setNavigationContentColor(MODE.WHITE)
     }
+
+
 }

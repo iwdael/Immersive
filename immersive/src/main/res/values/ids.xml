@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="immersive_status" type="id"/>
+    <item name="immersive_navigation" type="id"/>
+    <item name="immersive_content" type="id"/>
+</resources>

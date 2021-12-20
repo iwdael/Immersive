@@ -1,11 +1,11 @@
 ext {
     buidConfig = [
-            'compileSdkVersion': 28,
-            'targetSdkVersion' : 28,
-            'minSdkVersion'    : 24,
+            'compileSdkVersion': 30,
+            'targetSdkVersion' : 30,
+            'minSdkVersion'    : 19,
             'versionCode'      : 1,
             'versionName'      : '1.0.0',
-            'buildToolsVersion': '28.0.3'
+            'buildToolsVersion': '30.0.3'
     ]
     dependent = [
             'appcompat'       : 'androidx.appcompat:appcompat:1.3.1',

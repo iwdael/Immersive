@@ -1,5 +1,5 @@
 package com.iwdael.immersive
 
 enum class Orientation {
-    _0, _90, _180, _270
+    ORIENTATION_0, ORIENTATION_90, ORIENTATION_180, ORIENTATION_270
 }
