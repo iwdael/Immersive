@@ -4,9 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Build.VERSION
-import android.util.Log
 import android.view.*
-import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes

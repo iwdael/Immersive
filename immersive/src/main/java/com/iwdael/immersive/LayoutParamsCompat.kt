@@ -3,7 +3,6 @@ package com.iwdael.immersive
 import android.app.Activity
 import android.view.Gravity
 import android.widget.FrameLayout
-import androidx.appcompat.widget.ContentFrameLayout
 
 /**
  * author : Iwdael
@@ -12,14 +11,14 @@ import androidx.appcompat.widget.ContentFrameLayout
  * version: 1.0
  */
 
-fun Activity.createStatusViewLayoutParamsVertical(): FrameLayout.LayoutParams {
+fun createStatusViewLayoutParamsVertical(): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.MATCH_PARENT,
         FrameLayout.LayoutParams.WRAP_CONTENT
     )
 }
 
-fun Activity.createNavigationViewLayoutParamsVertical(): FrameLayout.LayoutParams {
+fun createNavigationViewLayoutParamsVertical(): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.MATCH_PARENT,
         FrameLayout.LayoutParams.WRAP_CONTENT
@@ -44,14 +43,14 @@ fun Activity.createContentViewLayoutParamsVertical(
     }
 }
 
-fun Activity.createStatusViewLayoutParamsAngle90(): FrameLayout.LayoutParams {
+fun createStatusViewLayoutParamsAngle90(): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.MATCH_PARENT,
         FrameLayout.LayoutParams.WRAP_CONTENT
     )
 }
 
-fun Activity.createNavigationViewLayoutParamsAngle90(): FrameLayout.LayoutParams {
+fun createNavigationViewLayoutParamsAngle90(): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.WRAP_CONTENT,
         FrameLayout.LayoutParams.MATCH_PARENT
@@ -76,14 +75,14 @@ fun Activity.createContentViewLayoutParamsAngle90(
 }
 
 
-fun Activity.createStatusViewLayoutParamsAngle270(): FrameLayout.LayoutParams {
+fun createStatusViewLayoutParamsAngle270(): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.MATCH_PARENT,
         FrameLayout.LayoutParams.WRAP_CONTENT
     )
 }
 
-fun Activity.createNavigationViewLayoutParamsAngle270(): FrameLayout.LayoutParams {
+fun createNavigationViewLayoutParamsAngle270(): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.WRAP_CONTENT,
         FrameLayout.LayoutParams.MATCH_PARENT
