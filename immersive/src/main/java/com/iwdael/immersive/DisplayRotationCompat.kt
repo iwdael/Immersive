@@ -64,7 +64,7 @@ fun Activity.registerImmersiveDisplayListener() {
     val dm = applicationContext.getSystemService(DISPLAY_SERVICE) as DisplayManager
     dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
 
-    currentPhoneRom.navigationStateUri()?.let {
+    currentPhoneRom.navigationStateUri().forEach {
         applicationContext.contentResolver.registerContentObserver(it, true, contentObserver)
     }
 

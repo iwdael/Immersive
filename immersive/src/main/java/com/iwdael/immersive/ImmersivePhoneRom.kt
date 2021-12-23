@@ -6,6 +6,7 @@ private val registeredRom = arrayListOf<PhoneRom>(
     GooglePhoneRom(),
     HuaweiPhoneRom(),
     OnePlusPhoneRom(),
+    OppoPbemPhoneRom(),
     OppoPhoneRom(),
     SamsungPhoneRom(),
     VivoPhoneRom(),

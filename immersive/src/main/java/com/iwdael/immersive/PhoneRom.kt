@@ -59,5 +59,5 @@ interface PhoneRom {
     /**
      * 状态栏改变
      */
-    fun navigationStateUri(): Uri?
+    fun navigationStateUri() = arrayOf<Uri>()
 }

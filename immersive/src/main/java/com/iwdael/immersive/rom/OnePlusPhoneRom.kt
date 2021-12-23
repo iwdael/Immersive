@@ -34,5 +34,5 @@ class OnePlusPhoneRom : PhoneRom {
         }
     }
 
-    override fun navigationStateUri(): Uri = Settings.System.getUriFor(CONTENT_KEY)
+    override fun navigationStateUri()  =  arrayOf(Settings.System.getUriFor(CONTENT_KEY))
 }

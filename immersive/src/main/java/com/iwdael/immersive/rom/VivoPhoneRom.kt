@@ -33,5 +33,5 @@ class VivoPhoneRom : PhoneRom {
         }
     }
 
-    override fun navigationStateUri(): Uri = Settings.Secure.getUriFor(CONTENT_KEY)
+    override fun navigationStateUri() = arrayOf(Settings.Secure.getUriFor(CONTENT_KEY))
 }

@@ -39,5 +39,5 @@ class DefaultPhoneRom : PhoneRom {
         return realWidth - displayWidth > 0 || realHeight - displayHeight > 0
     }
 
-    override fun navigationStateUri(): Uri? = null
+    override fun navigationStateUri() = arrayOf<Uri>()
 }

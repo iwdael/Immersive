@@ -35,5 +35,5 @@ class HuaweiPhoneRom : PhoneRom {
         }
     }
 
-    override fun navigationStateUri(): Uri = Settings.Global.getUriFor(CONTENT_KEY)
+    override fun navigationStateUri()= arrayOf(Settings.Global.getUriFor(CONTENT_KEY))
 }
