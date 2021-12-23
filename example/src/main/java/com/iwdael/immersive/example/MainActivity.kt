@@ -1,15 +1,10 @@
 package com.iwdael.immersive.example
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Color
-import android.hardware.display.DisplayManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -28,8 +23,8 @@ class MainActivity : AppCompatActivity() {
             R.layout.activity_main,
             R.color.blue,
             R.color.green,
-            statusEmbed = false,
-            navigationEmbed = false
+            hideStatusBar = false,
+            hideNavigationBar = false
         )
         val proRed = findViewById<SeekBar>(R.id.pro_red)
         val proGreen = findViewById<SeekBar>(R.id.pro_green)
@@ -93,11 +88,11 @@ class MainActivity : AppCompatActivity() {
         })
         val status = findViewById<Button>(R.id.btn_status)
         status.setOnClickListener {
-            if (isShowOfStatus()) hideStatus() else showStatus()
+            if (isShowOfStatusBar()) hideStatusBar() else showStatusBar()
         }
         val navigation = findViewById<Button>(R.id.btn_navigation)
         navigation.setOnClickListener {
-            if (isShowOfNavigation()) hideNavigation() else showNavigation()
+            if (isShowOfNavigationBar()) hideNavigationBar() else showNavigationBar()
         }
         val btnStatusTextColor = findViewById<Button>(R.id.btn_status_text_color)
         btnStatusTextColor.setOnClickListener(object : View.OnClickListener {

@@ -129,57 +129,57 @@ fun AppCompatActivity.setContentView(
     @LayoutRes layoutRes: Int,
     @ColorRes statusRes: Int,
     @ColorRes navigationRes: Int,
-    statusEmbed: Boolean,
-    navigationEmbed: Boolean
+    hideStatusBar: Boolean,
+    hideNavigationBar: Boolean
 ) {
     registerImmersiveDisplayListener()
     compatible19(this)
-    attachContentView(layoutRes, statusEmbed, navigationEmbed)
+    attachContentView(layoutRes, hideStatusBar, hideNavigationBar)
     compatible21(this)
     val statusView: StatusView = this.findViewById(R.id.immersive_status)
     val navigationView: NavigationView = this.findViewById(R.id.immersive_navigation)
     statusView.setBackgroundResource(statusRes)
     navigationView.setBackgroundResource(navigationRes)
-    if (statusEmbed) statusView.visibility = View.GONE
-    if (navigationEmbed) navigationView.visibility = View.GONE
+    if (hideStatusBar) statusView.visibility = View.GONE
+    if (hideNavigationBar) navigationView.visibility = View.GONE
 }
 
 fun <T : View> Activity.contentView(): T {
     return this.findViewById<T>(R.id.immersive_content)
 }
 
-fun Activity.isShowOfStatus(): Boolean {
+fun Activity.isShowOfStatusBar(): Boolean {
     return findViewById<View>(R.id.immersive_status)?.visibility == View.VISIBLE
 }
 
 
-fun Activity.isShowOfNavigation(): Boolean {
+fun Activity.isShowOfNavigationBar(): Boolean {
     return findViewById<View>(R.id.immersive_navigation)?.visibility == View.VISIBLE
 }
 
 
-fun Activity.showStatus() {
+fun Activity.showStatusBar() {
     refreshContentLayoutParams(
         false,
         findViewById<View>(R.id.immersive_navigation)?.visibility == View.GONE
     )
 }
 
-fun Activity.hideStatus() {
+fun Activity.hideStatusBar() {
     refreshContentLayoutParams(
         true,
         findViewById<View>(R.id.immersive_navigation)?.visibility == View.GONE
     )
 }
 
-fun Activity.showNavigation() {
+fun Activity.showNavigationBar() {
     refreshContentLayoutParams(
         findViewById<View>(R.id.immersive_status)?.visibility == View.GONE,
         false
     )
 }
 
-fun Activity.hideNavigation() {
+fun Activity.hideNavigationBar() {
     refreshContentLayoutParams(
         findViewById<View>(R.id.immersive_status)?.visibility == View.GONE,
         true
@@ -258,10 +258,6 @@ fun Activity.setOnSoftKeyBoardChangeListener(
 ) {
     val softKeyBoardListener = SoftKeyBoardKit(this)
     softKeyBoardListener.setOnSoftKeyBoardChangeListener(onSoftKeyBoardChangeListener)
-}
-
-fun Activity.immersiveContentView(): ViewGroup? {
-    return findViewById<ViewGroup>(R.id.immersive_content)
 }
 
 enum class MODE {
