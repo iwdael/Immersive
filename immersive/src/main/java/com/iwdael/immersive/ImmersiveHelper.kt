@@ -2,6 +2,7 @@ package com.iwdael.immersive
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.Gravity
 import android.view.Surface
@@ -17,6 +18,20 @@ import android.widget.FrameLayout
  */
 
 
+val BRAND_LOWER_CASE = Build.BRAND.toLowerCase()
+
+fun Context.getSystemComponentDimen(
+    dimenName: String
+): Int {
+    var statusHeight = 0
+    try {
+        val height = resources.getIdentifier(dimenName, "dimen", "android")
+        statusHeight = resources.getDimensionPixelSize(height)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return statusHeight
+}
 
 
 fun Context.getNavigationBarHeight(): Int {
@@ -28,8 +43,17 @@ fun Context.getNavigationBarHeight(): Int {
 }
 
 
+fun Orientation.gravityOfNavigationBar(): Int {
+    return currentPhoneRom.gravityOfNavigationBar(this)
+}
+
+fun Orientation.gravityOfStatusBar(): Int {
+    return currentPhoneRom.gravityOfStatusBar(this)
+}
+
+
 fun Context.getStatusBarHeight(): Int {
-     return currentPhoneRom.statusBarHeight(this)
+    return currentPhoneRom.statusBarHeight(this)
 }
 
 fun getActivity(context: Context?): Activity? {

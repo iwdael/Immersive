@@ -1,6 +1,6 @@
 package com.iwdael.immersive
 
-import android.app.Activity
+import android.content.Context
 import android.view.Gravity
 import android.widget.FrameLayout
 
@@ -11,23 +11,39 @@ import android.widget.FrameLayout
  * version: 1.0
  */
 
-fun createStatusViewLayoutParamsVertical(): FrameLayout.LayoutParams {
-    return FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.MATCH_PARENT,
-        FrameLayout.LayoutParams.WRAP_CONTENT
-    )
-}
 
-fun createNavigationViewLayoutParamsVertical(): FrameLayout.LayoutParams {
+fun createStatusBarLayoutParam(orientation: Orientation): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.MATCH_PARENT,
         FrameLayout.LayoutParams.WRAP_CONTENT
     ).apply {
-        gravity = Gravity.BOTTOM
+        gravity = orientation.gravityOfStatusBar()
     }
 }
 
-fun Activity.createContentViewLayoutParamsVertical(
+
+fun createNavigationBarLayoutParam(orientation: Orientation): FrameLayout.LayoutParams {
+    return (
+            if (orientation == Orientation.ORIENTATION_0 || orientation == Orientation.ORIENTATION_180) {
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT
+                )
+            } else {
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            }
+            )
+        .apply {
+            gravity = orientation.gravityOfNavigationBar()
+        }
+}
+
+
+fun Context.createContentLayoutParam(
+    orientation: Orientation,
     hideStateBar: Boolean,
     hideNavigationBar: Boolean
 ): FrameLayout.LayoutParams {
@@ -37,70 +53,20 @@ fun Activity.createContentViewLayoutParamsVertical(
     ).let {
         if (!hideStateBar)
             it.topMargin = getStatusBarHeight()
-        if (!hideNavigationBar)
-            it.bottomMargin = getNavigationBarHeight()
+        if (!hideNavigationBar) {
+            when (orientation.gravityOfNavigationBar()) {
+                Gravity.BOTTOM -> {
+                    it.bottomMargin = getNavigationBarHeight()
+                }
+                Gravity.START -> {
+                    it.leftMargin = getNavigationBarHeight()
+                }
+                Gravity.END -> {
+                    it.rightMargin = getNavigationBarHeight()
+                }
+            }
+        }
         it
     }
 }
 
-fun createStatusViewLayoutParamsAngle90(): FrameLayout.LayoutParams {
-    return FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.MATCH_PARENT,
-        FrameLayout.LayoutParams.WRAP_CONTENT
-    )
-}
-
-fun createNavigationViewLayoutParamsAngle90(): FrameLayout.LayoutParams {
-    return FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.WRAP_CONTENT,
-        FrameLayout.LayoutParams.MATCH_PARENT
-    ).apply { gravity = Gravity.END }
-}
-
-
-fun Activity.createContentViewLayoutParamsAngle90(
-    hideStateBar: Boolean,
-    hideNavigationBar: Boolean
-): FrameLayout.LayoutParams {
-    return FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.MATCH_PARENT,
-        FrameLayout.LayoutParams.MATCH_PARENT
-    ).let {
-        if (!hideStateBar)
-            it.topMargin = getStatusBarHeight()
-        if (!hideNavigationBar)
-            it.rightMargin = getNavigationBarHeight()
-        it
-    }
-}
-
-
-fun createStatusViewLayoutParamsAngle270(): FrameLayout.LayoutParams {
-    return FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.MATCH_PARENT,
-        FrameLayout.LayoutParams.WRAP_CONTENT
-    )
-}
-
-fun createNavigationViewLayoutParamsAngle270(): FrameLayout.LayoutParams {
-    return FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.WRAP_CONTENT,
-        FrameLayout.LayoutParams.MATCH_PARENT
-    ).apply { gravity = Gravity.START }
-}
-
-fun Activity.createContentViewLayoutParamsAngle270(
-    hideStateBar: Boolean,
-    hideNavigationBar: Boolean
-): FrameLayout.LayoutParams {
-    return FrameLayout.LayoutParams(
-        FrameLayout.LayoutParams.MATCH_PARENT,
-        FrameLayout.LayoutParams.MATCH_PARENT
-    ).let {
-        if (!hideStateBar)
-            it.topMargin = getStatusBarHeight()
-        if (!hideNavigationBar)
-            it.leftMargin = getNavigationBarHeight()
-        it
-    }
-}

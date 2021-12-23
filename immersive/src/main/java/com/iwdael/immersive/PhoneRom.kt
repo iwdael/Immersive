@@ -3,6 +3,7 @@ package com.iwdael.immersive
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.view.Gravity
 
 
 /**
@@ -13,6 +14,23 @@ import android.os.Build
  * version: 1.0
  */
 interface PhoneRom {
+
+
+    /**
+     * 根据屏幕旋转角度判断当前状态所在的位置，绝大多数不用修改
+     */
+    fun gravityOfStatusBar(orientation: Orientation) = Gravity.TOP
+
+    /**
+     * 根据屏幕旋转角度判断当前导航所在的位置，绝大多数不用修改
+     */
+    fun gravityOfNavigationBar(orientation: Orientation) = when (orientation) {
+        Orientation.ORIENTATION_0 -> Gravity.BOTTOM
+        Orientation.ORIENTATION_90 -> Gravity.END
+        Orientation.ORIENTATION_180 -> Gravity.BOTTOM
+        Orientation.ORIENTATION_270 -> Gravity.START
+    }
+
     /**
      * 判断当前rom是否为定义ROM
      */
@@ -37,21 +55,5 @@ interface PhoneRom {
      */
     fun navigationBarExist(activity: Activity): Boolean
 
-    companion object {
 
-        val BRAND_LOWER_CASE = Build.BRAND.toLowerCase()
-
-        fun Context.getSystemComponentDimen(
-            dimenName: String
-        ): Int {
-            var statusHeight = 0
-            try {
-                val height = resources.getIdentifier(dimenName, "dimen", "android")
-                statusHeight = resources.getDimensionPixelSize(height)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return statusHeight
-        }
-    }
 }

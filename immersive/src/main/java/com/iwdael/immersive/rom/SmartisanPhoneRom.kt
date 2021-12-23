@@ -6,7 +6,7 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.iwdael.immersive.Immersive.defaultPhoneRom
 import com.iwdael.immersive.PhoneRom
-import com.iwdael.immersive.PhoneRom.Companion.BRAND_LOWER_CASE
+import com.iwdael.immersive.BRAND_LOWER_CASE
 import java.lang.Exception
 
 /**

@@ -69,59 +69,24 @@ fun Activity.attachContentView(
     statusEmbed: Boolean,
     navigationEmbed: Boolean
 ) {
-    when (immersiveStates[this.hashCode().toString()]!!.orientation) {
-        Orientation.ORIENTATION_0, Orientation.ORIENTATION_180 -> {
-            this.setContentView(
-                LayoutInflater.from(this).inflate(layoutRes, null)
-                    .apply { id = R.id.immersive_content },
-                createContentViewLayoutParamsVertical(statusEmbed, navigationEmbed)
-            )
-            this.addContentView(
-                StatusView(this, null, 0, true)
-                    .apply { id = R.id.immersive_status },
-                createStatusViewLayoutParamsVertical()
-            )
-            this.addContentView(
-                NavigationView(this, null, 0, true)
-                    .apply { id = R.id.immersive_navigation },
-                createNavigationViewLayoutParamsVertical()
-            )
-        }
-        Orientation.ORIENTATION_90 -> {
-            this.setContentView(
-                LayoutInflater.from(this).inflate(layoutRes, null)
-                    .apply { id = R.id.immersive_content },
-                createContentViewLayoutParamsAngle90(statusEmbed, navigationEmbed)
-            )
-            this.addContentView(
-                StatusView(this, null, 0, true)
-                    .apply { id = R.id.immersive_status },
-                createStatusViewLayoutParamsAngle90()
-            )
-            this.addContentView(
-                NavigationView(this, null, 0, true)
-                    .apply { id = R.id.immersive_navigation },
-                createNavigationViewLayoutParamsAngle90()
-            )
-        }
-        Orientation.ORIENTATION_270 -> {
-            this.setContentView(
-                LayoutInflater.from(this).inflate(layoutRes, null)
-                    .apply { id = R.id.immersive_content },
-                createContentViewLayoutParamsAngle270(statusEmbed, navigationEmbed)
-            )
-            this.addContentView(
-                StatusView(this, null, 0, true)
-                    .apply { id = R.id.immersive_status },
-                createStatusViewLayoutParamsAngle270()
-            )
-            this.addContentView(
-                NavigationView(this, null, 0, true)
-                    .apply { id = R.id.immersive_navigation },
-                createNavigationViewLayoutParamsAngle270()
-            )
-        }
-    }
+
+    val orientation = immersiveStates[this.hashCode().toString()]!!.orientation
+    this.setContentView(
+        LayoutInflater.from(this).inflate(layoutRes, null)
+            .apply { id = R.id.immersive_content },
+        createContentLayoutParam(orientation, statusEmbed, navigationEmbed)
+    )
+    this.addContentView(
+        StatusView(this, null, 0, true)
+            .apply { id = R.id.immersive_status },
+        createStatusBarLayoutParam(orientation)
+    )
+    this.addContentView(
+        NavigationView(this, null, 0, true)
+            .apply { id = R.id.immersive_navigation },
+        createNavigationBarLayoutParam(orientation)
+    )
+
 
 }
 
@@ -134,8 +99,8 @@ fun AppCompatActivity.setContentView(
 ) {
     registerImmersiveDisplayListener()
     compatible19(this)
-    attachContentView(layoutRes, hideStatusBar, hideNavigationBar)
     compatible21(this)
+    attachContentView(layoutRes, hideStatusBar, hideNavigationBar)
     val statusView: StatusView = this.findViewById(R.id.immersive_status)
     val navigationView: NavigationView = this.findViewById(R.id.immersive_navigation)
     statusView.setBackgroundResource(statusRes)
