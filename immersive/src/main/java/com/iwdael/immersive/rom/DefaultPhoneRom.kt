@@ -1,6 +1,7 @@
 package com.iwdael.immersive.rom
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
 import androidx.annotation.RequiresApi
@@ -37,4 +38,6 @@ class DefaultPhoneRom : PhoneRom {
 
         return realWidth - displayWidth > 0 || realHeight - displayHeight > 0
     }
+
+    override fun navigationStateUri(): Uri? = null
 }

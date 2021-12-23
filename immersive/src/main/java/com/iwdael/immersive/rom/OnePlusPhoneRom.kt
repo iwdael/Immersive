@@ -1,6 +1,7 @@
 package com.iwdael.immersive.rom
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
@@ -33,5 +34,5 @@ class OnePlusPhoneRom : PhoneRom {
         }
     }
 
-
+    override fun navigationStateUri(): Uri = Settings.System.getUriFor(CONTENT_KEY)
 }

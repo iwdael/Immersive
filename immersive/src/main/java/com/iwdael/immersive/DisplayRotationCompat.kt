@@ -2,6 +2,7 @@ package com.iwdael.immersive
 
 import android.app.Activity
 import android.content.Context.DISPLAY_SERVICE
+import android.database.ContentObserver
 import android.hardware.display.DisplayManager
 import android.os.Handler
 import android.os.Looper
@@ -42,6 +43,17 @@ private val displayListener = object :
     }
 }
 
+private val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+    override fun onChange(selfChange: Boolean) {
+        val states = immersiveStates.values.toList()
+        for (index in states.indices) {
+            val state = states[index]
+            val activity = state.immersive.get() ?: continue
+            activity.refreshContentLayoutParams()
+        }
+    }
+}
+
 fun Activity.registerImmersiveDisplayListener() {
     immersiveStates[this.hashCode().toString()] = ImmersiveState(
         WeakReference(this),
@@ -51,4 +63,10 @@ fun Activity.registerImmersiveDisplayListener() {
     )
     val dm = applicationContext.getSystemService(DISPLAY_SERVICE) as DisplayManager
     dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
+
+    currentPhoneRom.navigationStateUri()?.let {
+        Log.v("dzq", "$it")
+        applicationContext.contentResolver.registerContentObserver(it, true, contentObserver)
+    }
+
 }

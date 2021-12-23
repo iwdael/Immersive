@@ -1,6 +1,7 @@
 package com.iwdael.immersive.rom
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
@@ -21,7 +22,7 @@ class SamsungPhoneRom : PhoneRom {
         private const val CONTENT_KEY = "navigation_bar_gesture_while_hidden"
     }
 
-    override fun isCurrentPhoneRom()= BRAND_LOWER_CASE.contains("samsung")
+    override fun isCurrentPhoneRom() = BRAND_LOWER_CASE.contains("samsung")
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
@@ -32,4 +33,5 @@ class SamsungPhoneRom : PhoneRom {
         }
     }
 
+    override fun navigationStateUri(): Uri = Settings.Global.getUriFor(CONTENT_KEY)
 }

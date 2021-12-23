@@ -2,6 +2,7 @@ package com.iwdael.immersive
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.view.Gravity
 
@@ -55,5 +56,8 @@ interface PhoneRom {
      */
     fun navigationBarExist(activity: Activity): Boolean
 
-
+    /**
+     * 状态栏改变
+     */
+    fun navigationStateUri(): Uri?
 }

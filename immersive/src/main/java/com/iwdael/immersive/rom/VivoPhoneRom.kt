@@ -1,6 +1,7 @@
 package com.iwdael.immersive.rom
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
@@ -32,4 +33,5 @@ class VivoPhoneRom : PhoneRom {
         }
     }
 
+    override fun navigationStateUri(): Uri = Settings.Secure.getUriFor(CONTENT_KEY)
 }
