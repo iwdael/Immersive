@@ -1,10 +1,10 @@
-package com.iwdael.immersive.navigationbar
+package com.iwdael.immersive.rom
 
 import android.app.Activity
 import android.os.Build
 import android.util.DisplayMetrics
 import androidx.annotation.RequiresApi
-import com.iwdael.immersive.NavigationBarRom
+import com.iwdael.immersive.PhoneRom
 
 /**
  * author : Iwdael(iwdael)
@@ -13,8 +13,11 @@ import com.iwdael.immersive.NavigationBarRom
  * desc   : other
  * version: 1.0
  */
-val otherNavigationBarRom by lazy { OtherNavigationBarRom() }
-class OtherNavigationBarRom : NavigationBarRom {
+
+class DefaultPhoneRom : PhoneRom {
+    override fun isCurrentPhoneRom(): Boolean {
+        return true
+    }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {

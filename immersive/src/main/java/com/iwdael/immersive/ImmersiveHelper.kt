@@ -17,31 +17,19 @@ import android.widget.FrameLayout
  */
 
 
-private fun Context.getSystemComponentDimen(
-    dimenName: String
-): Int {
-    var statusHeight = 0
-    try {
-        val height = resources.getIdentifier(dimenName, "dimen", "android")
-        statusHeight = resources.getDimensionPixelSize(height)
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return statusHeight
-}
 
 
 fun Context.getNavigationBarHeight(): Int {
     val activity = getActivity(this)
     if (activity != null) {
-        if (!navigationHelper.navigationBarExist(activity)) return 0
+        if (!currentPhoneRom.navigationBarExist(activity)) return 0
     }
-    return getSystemComponentDimen("navigation_bar_height")
+    return currentPhoneRom.navigationBarHeight(this)
 }
 
 
 fun Context.getStatusBarHeight(): Int {
-    return getSystemComponentDimen("status_bar_height")
+     return currentPhoneRom.statusBarHeight(this)
 }
 
 fun getActivity(context: Context?): Activity? {

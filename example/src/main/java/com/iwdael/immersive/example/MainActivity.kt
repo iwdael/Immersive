@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private var alpha = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v("dzq", "onCreate")
+        Log.v("dzq", "onCreate:${currentPhoneRom}")
         setContentView(
             R.layout.activity_main,
             R.color.blue,

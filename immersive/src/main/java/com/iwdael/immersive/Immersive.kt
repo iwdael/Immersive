@@ -144,6 +144,9 @@ fun AppCompatActivity.setContentView(
     if (navigationEmbed) navigationView.visibility = View.GONE
 }
 
+fun <T : View> Activity.contentView(): T {
+    return this.findViewById<T>(R.id.immersive_content)
+}
 
 fun Activity.isShowOfStatus(): Boolean {
     return findViewById<View>(R.id.immersive_status)?.visibility == View.VISIBLE
