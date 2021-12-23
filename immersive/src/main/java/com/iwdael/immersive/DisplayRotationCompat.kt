@@ -65,7 +65,6 @@ fun Activity.registerImmersiveDisplayListener() {
     dm.registerDisplayListener(displayListener, Handler(Looper.getMainLooper()))
 
     currentPhoneRom.navigationStateUri()?.let {
-        Log.v("dzq", "$it")
         applicationContext.contentResolver.registerContentObserver(it, true, contentObserver)
     }
 
