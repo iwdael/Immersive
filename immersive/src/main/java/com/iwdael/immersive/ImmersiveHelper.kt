@@ -101,48 +101,39 @@ fun Activity.refreshContentLayoutParams(hideStatusBar: Boolean, hideNavigationBa
     val contentParams = content.layoutParams as FrameLayout.LayoutParams
     val navigationParams = navigation.layoutParams as FrameLayout.LayoutParams
     val state = immersiveStates[this.hashCode().toString()] ?: return
-    when (state.orientation) {
-        Orientation.ORIENTATION_0, Orientation.ORIENTATION_180 -> {
-            if (hideStatusBar)
-                contentParams.topMargin = 0
-            else
-                contentParams.topMargin = getStatusBarHeight()
+    val orientation = state.orientation
+    if (hideStatusBar) {
+        contentParams.topMargin = 0
+    } else {
+        contentParams.topMargin = getStatusBarHeight()
+    }
+    if (hideNavigationBar) {
+        contentParams.bottomMargin = 0
+        contentParams.leftMargin = 0
+        contentParams.rightMargin = 0
+    } else {
+        content.postDelayed({
+            navigationParams.gravity = orientation.gravityOfNavigationBar()
+            navigation.layoutParams = navigationParams
+            when (orientation.gravityOfNavigationBar()) {
+                Gravity.BOTTOM -> {
+                    contentParams.bottomMargin = getNavigationBarHeight()
+                    contentParams.leftMargin = 0
+                    contentParams.rightMargin = 0
+                }
+                Gravity.START -> {
+                    contentParams.bottomMargin = 0
+                    contentParams.leftMargin = getNavigationBarHeight()
+                    contentParams.rightMargin = 0
+                }
+                Gravity.END -> {
+                    contentParams.bottomMargin = 0
+                    contentParams.leftMargin = 0
+                    contentParams.rightMargin = getNavigationBarHeight()
+                }
+            }
+            content.layoutParams = contentParams
+        }, 200)
 
-            if (hideNavigationBar)
-                contentParams.bottomMargin = 0
-            else
-                contentParams.bottomMargin = getNavigationBarHeight()
-
-            contentParams.leftMargin = 0
-            contentParams.rightMargin = 0
-        }
-        Orientation.ORIENTATION_90 -> {
-            if (hideStatusBar)
-                contentParams.topMargin = 0
-            else
-                contentParams.topMargin = getStatusBarHeight()
-
-            if (hideNavigationBar)
-                contentParams.rightMargin = 0
-            else
-                contentParams.rightMargin = getNavigationBarHeight()
-            navigationParams.gravity = Gravity.END
-            contentParams.bottomMargin = 0
-            contentParams.leftMargin = 0
-        }
-        Orientation.ORIENTATION_270 -> {
-            if (hideStatusBar)
-                contentParams.topMargin = 0
-            else
-                contentParams.topMargin = getStatusBarHeight()
-
-            if (hideNavigationBar)
-                contentParams.leftMargin = 0
-            else
-                contentParams.leftMargin = getNavigationBarHeight()
-            navigationParams.gravity = Gravity.START
-            contentParams.bottomMargin = 0
-            contentParams.rightMargin = 0
-        }
     }
 }
