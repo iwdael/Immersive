@@ -21,8 +21,15 @@ class StatusView constructor(
     defStyleAttr: Int = 0,
     private val isFromImmersive: Boolean
 ) : View(activity, attrs, defStyleAttr) {
+
     constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
             : this(context, attrs, defStyleAttr, false)
+
+    constructor(context: Context, attrs: AttributeSet? = null)
+            : this(context, attrs, 0, false)
+
+    constructor(context: Context)
+            : this(context, null, 0, false)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)

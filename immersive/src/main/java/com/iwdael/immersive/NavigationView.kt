@@ -9,13 +9,19 @@ import android.util.Log
 import android.view.View
 
 class NavigationView @JvmOverloads constructor(
-    private val activity: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    private val isFromImmersive: Boolean
+        private val activity: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+        private val isFromImmersive: Boolean
 ) : View(activity, attrs, defStyleAttr) {
     constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
             : this(context, attrs, defStyleAttr, false)
+
+    constructor(context: Context, attrs: AttributeSet? = null)
+            : this(context, attrs, 0, false)
+
+    constructor(context: Context)
+            : this(context, null, 0, false)
 
     private val orientation: Orientation by lazy { activity.getActivityOrientationForContext() }
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -49,7 +55,7 @@ class NavigationView @JvmOverloads constructor(
         if (!isFromImmersive) return super.onRestoreInstanceState(state)
         state as Bundle
         visibility = if (state.getBoolean(BUNDLE_VISIBILITY)) VISIBLE else GONE
-         super.onRestoreInstanceState(state.getParcelable(BUNDLE_SUPER))
+        super.onRestoreInstanceState(state.getParcelable(BUNDLE_SUPER))
         if (activity is Activity) activity.refreshContentLayoutParams()
     }
 
