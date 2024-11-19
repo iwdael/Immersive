@@ -31,4 +31,4 @@ object Immersive {
     val defaultPhoneRom by lazy { DefaultPhoneRom() }
 }
 
-val currentPhoneRom = Immersive.getCurrentPhoneRom()
+val currentPhoneRom get() = Immersive.getCurrentPhoneRom()
