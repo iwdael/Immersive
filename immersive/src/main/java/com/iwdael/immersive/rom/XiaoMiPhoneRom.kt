@@ -19,6 +19,7 @@ import java.lang.Exception
 class XiaoMiPhoneRom : PhoneRom {
     companion object {
         private const val CONTENT_KEY = "force_fsg_nav_bar"
+        private const val CONTENT_KEY_2 = "hide_gesture_line"
     }
 
     override fun isCurrentPhoneRom() = Build.MANUFACTURER.toLowerCase() == "xiaomi"
@@ -26,7 +27,7 @@ class XiaoMiPhoneRom : PhoneRom {
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {
         return try {
-            Settings.Global.getInt(activity.contentResolver, CONTENT_KEY) == 0
+            Settings.Global.getInt(activity.contentResolver, CONTENT_KEY) == 0 || (Settings.Global.getInt(activity.contentResolver, CONTENT_KEY) == 1 && Settings.Global.getInt(activity.contentResolver, CONTENT_KEY_2) == 1)
         } catch (e: Exception) {
             defaultPhoneRom.navigationBarExist(activity)
         }
