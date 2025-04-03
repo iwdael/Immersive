@@ -5,9 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import androidx.annotation.Nullable
+import com.iwdael.immersive.ext.notifyLayoutParam
 
 /**
  * author  : Iwdael
@@ -15,9 +14,9 @@ import androidx.annotation.Nullable
  * github  : http://github.com/iwdael
  * project : Immersive
  */
-class StatusView constructor(
+class StatusView(
     private val activity: Context,
-    @Nullable attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     private val isFromImmersive: Boolean
 ) : View(activity, attrs, defStyleAttr) {
@@ -33,7 +32,7 @@ class StatusView constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)
-        val height = context.getStatusBarHeight()
+        val height = currentPhoneRom.statusBarHeight(context)
         setMeasuredDimension(width, height)
     }
 
@@ -56,7 +55,7 @@ class StatusView constructor(
         state as Bundle
         visibility = if (state.getBoolean(BUNDLE_VISIBILITY)) VISIBLE else GONE
         super.onRestoreInstanceState(state.getParcelable(BUNDLE_SUPER))
-        if (activity is Activity) activity.refreshContentLayoutParams()
+        if (activity is Activity) activity.notifyLayoutParam()
 
     }
 }

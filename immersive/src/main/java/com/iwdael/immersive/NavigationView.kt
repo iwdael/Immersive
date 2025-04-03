@@ -5,14 +5,15 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
+import com.iwdael.immersive.State.Companion.immersiveState
+import com.iwdael.immersive.ext.notifyLayoutParam
 
 class NavigationView @JvmOverloads constructor(
-        private val activity: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-        private val isFromImmersive: Boolean
+    private val activity: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    private val isFromImmersive: Boolean
 ) : View(activity, attrs, defStyleAttr) {
     constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
             : this(context, attrs, defStyleAttr, false)
@@ -23,16 +24,17 @@ class NavigationView @JvmOverloads constructor(
     constructor(context: Context)
             : this(context, null, 0, false)
 
-    private val orientation: Orientation by lazy { activity.getActivityOrientationForContext() }
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width: Int
         val height: Int
-        if (orientation == Orientation.ORIENTATION_0 || orientation == Orientation.ORIENTATION_180) {
+        activity as Activity
+        val angle = activity.immersiveState().angle
+        if (angle == Angle.Angle0 || angle == Angle.Angle180) {
             width = MeasureSpec.getSize(widthMeasureSpec)
-            height = context.getNavigationBarHeight()
+            height = currentPhoneRom.navigationBarHeight(context)
         } else {
             height = MeasureSpec.getSize(heightMeasureSpec)
-            width = context.getNavigationBarHeight()
+            width = currentPhoneRom.navigationBarHeight(context)
         }
         setMeasuredDimension(width, height)
     }
@@ -56,7 +58,7 @@ class NavigationView @JvmOverloads constructor(
         state as Bundle
         visibility = if (state.getBoolean(BUNDLE_VISIBILITY)) VISIBLE else GONE
         super.onRestoreInstanceState(state.getParcelable(BUNDLE_SUPER))
-        if (activity is Activity) activity.refreshContentLayoutParams()
+        if (activity is Activity) activity.notifyLayoutParam()
     }
 
 }

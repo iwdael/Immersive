@@ -1,3 +1,0 @@
-include ':immersive'
-include ':example'
-rootProject.name = "Immersive"

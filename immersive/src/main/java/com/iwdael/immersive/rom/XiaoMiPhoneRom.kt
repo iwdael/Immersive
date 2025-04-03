@@ -1,7 +1,6 @@
 package com.iwdael.immersive.rom
 
 import android.app.Activity
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
@@ -22,7 +21,7 @@ class XiaoMiPhoneRom : PhoneRom {
         private const val CONTENT_KEY_2 = "hide_gesture_line"
     }
 
-    override fun isCurrentPhoneRom() = Build.MANUFACTURER.toLowerCase() == "xiaomi"
+    override fun isCurrentPhoneRom(brand: String, product: String, model: String) = Build.MANUFACTURER.toLowerCase() == "xiaomi"
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun navigationBarExist(activity: Activity): Boolean {

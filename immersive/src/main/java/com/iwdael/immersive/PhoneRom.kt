@@ -3,39 +3,35 @@ package com.iwdael.immersive
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.view.Gravity
-
+import com.iwdael.immersive.ext.getSystemComponentDimen
 
 /**
- * author : Iwdael(iwdael)
- * e-mail : iwdael@outlook.com
- * time   : 2019/8/5
- * desc   : MVVM
- * version: 1.0
+ * @author 段泽全
+ * @since 2025/4/2
+ * @desc this is Phone
  */
+
 interface PhoneRom {
-
-
     /**
      * 根据屏幕旋转角度判断当前状态所在的位置，绝大多数不用修改
      */
-    fun gravityOfStatusBar(orientation: Orientation) = Gravity.TOP
+    fun gravityOfStatusBar(angle: Angle) = Gravity.TOP
 
     /**
      * 根据屏幕旋转角度判断当前导航所在的位置，绝大多数不用修改
      */
-    fun gravityOfNavigationBar(orientation: Orientation) = when (orientation) {
-        Orientation.ORIENTATION_0 -> Gravity.BOTTOM
-        Orientation.ORIENTATION_90 -> Gravity.END
-        Orientation.ORIENTATION_180 -> Gravity.BOTTOM
-        Orientation.ORIENTATION_270 -> Gravity.START
+    fun gravityOfNavigationBar(angle: Angle) = when (angle) {
+        Angle.Angle0 -> Gravity.BOTTOM
+        Angle.Angle90 -> Gravity.END
+        Angle.Angle180 -> Gravity.TOP
+        Angle.Angle270 -> Gravity.START
     }
 
     /**
      * 判断当前rom是否为定义ROM
      */
-    fun isCurrentPhoneRom(): Boolean
+    fun isCurrentPhoneRom(brand: String, product: String, model: String): Boolean
 
     /**
      * 状态栏高度

@@ -1,0 +1,29 @@
+[versions]
+targetSdk = "35"
+compileSdk = "34"
+minSdk = "21"
+versionName = "0.0.1"
+agp = "8.5.2"
+constraintlayout = "2.1.4"
+kotlin = "2.0.20"
+coreKtx = "1.13.0"
+lifecycleRuntimeKtx = "2.6.2"
+appcompat = "1.7.0"
+jetbrainsKotlinJvm = "1.9.25"
+fragmentKtx = "1.8.6"
+annotationJvm = "1.9.1"
+
+
+[libraries]
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
