@@ -1,230 +1,145 @@
 package com.iwdael.immersive
 
-import android.app.Activity
 import android.graphics.Color
 import android.os.Build
-import android.os.Build.VERSION
-import android.view.*
+import android.view.View
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
+import com.iwdael.immersive.State.Companion.immersiveState
+import com.iwdael.immersive.State.Companion.stateInit
+import com.iwdael.immersive.ext.attachView
+import com.iwdael.immersive.ext.compatible19
+import com.iwdael.immersive.ext.compatible21
+import com.iwdael.immersive.ext.contentLayoutParam
+import com.iwdael.immersive.ext.listenForScreenRotation
+import com.iwdael.immersive.ext.systemUiFlag
+import com.iwdael.immersive.rom.BlackSharkPhoneRom
+import com.iwdael.immersive.rom.DefaultPhoneRom
+import com.iwdael.immersive.rom.GooglePhoneRom
+import com.iwdael.immersive.rom.HuaweiPhoneRom
+import com.iwdael.immersive.rom.NokiaPhoneRom
+import com.iwdael.immersive.rom.OnePlusPhoneRom
+import com.iwdael.immersive.rom.OppoPbemPhoneRom
+import com.iwdael.immersive.rom.OppoPhoneRom
+import com.iwdael.immersive.rom.SamsungPhoneRom
+import com.iwdael.immersive.rom.SmartisanPhoneRom
+import com.iwdael.immersive.rom.VivoPhoneRom
+import com.iwdael.immersive.rom.XiaoMiPhoneRom
 
 /**
- * author  : Hacknife
- * e-mail  : 4884280@qq.com
- * github  : http://github.com/iwdael
- * project : Immersive
+ * @author 段泽全
+ * @since 2025/4/2
+ * @desc this is Immersive
  */
 
+private val registeredRom = arrayListOf(
+    GooglePhoneRom(),
+    HuaweiPhoneRom(),
+    OnePlusPhoneRom(),
+    OppoPbemPhoneRom(),
+    OppoPhoneRom(),
+    SamsungPhoneRom(),
+    VivoPhoneRom(),
+    XiaoMiPhoneRom(),
+    BlackSharkPhoneRom(),
+    SmartisanPhoneRom(),
+    NokiaPhoneRom(),
+)
 
-val immersiveStates = hashMapOf<String, ImmersiveState>()
-
-private fun compatible19(activity: FragmentActivity) {
-    if (VERSION.SDK_INT >= 19 && VERSION.SDK_INT < 21) {
-        activity.window.requestFeature(Window.FEATURE_NO_TITLE)
-        activity.window
-            .addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        activity.window
-            .addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+object Immersive {
+    @JvmStatic
+    fun registerPhoneRom(rom: PhoneRom) {
+        registeredRom.add(0, rom)
     }
 
-}
-
-private fun compatible21(activity: FragmentActivity) {
-    if (VERSION.SDK_INT >= 21) {
-        activity.window.statusBarColor = Color.TRANSPARENT
-        activity.window.navigationBarColor = Color.TRANSPARENT
-        activity.window?.decorView?.systemUiVisibility =
-            systemUiFlag(
-                immersiveStates[activity.hashCode().toString()]?.statusBarContentIsDark ?: true,
-                immersiveStates[activity.hashCode().toString()]?.navigationBarContentIsDark ?: true
-            )
-    }
-}
-
-private fun systemUiFlag(
-    statusBarContentIsDark: Boolean,
-    navigationBarContentIsDark: Boolean
-): Int {
-    var flag = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-    when {
-        VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-            if (statusBarContentIsDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            if (navigationBarContentIsDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+    @JvmStatic
+    internal fun getCurrentPhoneRom(): PhoneRom {
+        registeredRom.forEach {
+            if (it.isCurrentPhoneRom(Build.BRAND.lowercase(), Build.PRODUCT.lowercase(), Build.MODEL.lowercase())) return it
         }
-        VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-            if (statusBarContentIsDark) flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
+        return defaultPhoneRom
     }
-    return flag
+
+    internal val defaultPhoneRom by lazy { DefaultPhoneRom() }
 }
 
-
-fun Activity.attachContentView(
-    @LayoutRes layoutRes: Int,
-    statusEmbed: Boolean,
-    navigationEmbed: Boolean
-) {
-
-    val orientation = immersiveStates[this.hashCode().toString()]!!.orientation
-    this.setContentView(
-        LayoutInflater.from(this).inflate(layoutRes, null)
-            .apply { id = R.id.immersive_content },
-        createContentLayoutParam(orientation, statusEmbed, navigationEmbed)
-    )
-    this.addContentView(
-        StatusView(this, null, 0, true)
-            .apply { id = R.id.immersive_status },
-        createStatusBarLayoutParam(orientation)
-    )
-    this.addContentView(
-        NavigationView(this, null, 0, true)
-            .apply { id = R.id.immersive_navigation },
-        createNavigationBarLayoutParam(orientation)
-    )
-
-
-}
+internal val currentPhoneRom get() = Immersive.getCurrentPhoneRom()
 
 fun AppCompatActivity.setContentView(
     @LayoutRes layoutRes: Int,
-    @ColorRes statusRes: Int,
-    @ColorRes navigationRes: Int,
-    hideStatusBar: Boolean,
-    hideNavigationBar: Boolean
+    @ColorInt colorStatusBar: Int = Color.WHITE,
+    @ColorInt colorNavBar: Int = Color.WHITE,
+    stateStatusBar: BarState = BarState.SHOW,
+    stateNavBar: BarState = BarState.SHOW,
+    isLightStatusBar: Boolean = true,
+    isLightNavBar: Boolean = true
 ) {
-    registerImmersiveDisplayListener()
-    compatible19(this)
-    compatible21(this)
-    attachContentView(layoutRes, hideStatusBar, hideNavigationBar)
-    val statusView: StatusView = this.findViewById(R.id.immersive_status)
-    val navigationView: NavigationView = this.findViewById(R.id.immersive_navigation)
-    statusView.setBackgroundResource(statusRes)
-    navigationView.setBackgroundResource(navigationRes)
-    if (hideStatusBar) statusView.visibility = View.GONE
-    if (hideNavigationBar) navigationView.visibility = View.GONE
+    stateInit(colorStatusBar, colorNavBar, stateStatusBar, stateNavBar, isLightNavBar, isLightStatusBar)
+    compatible19()
+    compatible21()
+    attachView(layoutRes)
+    listenForScreenRotation()
 }
 
-fun <T : View> Activity.contentView(): T {
-    return this.findViewById<T>(R.id.immersive_content)
+fun AppCompatActivity.setStatusBarColor(color: Int) {
+    val state = immersiveState()
+    state.colorStatusBar = color
+    if (state.stateStatusBar == BarState.DISABLE) return
+    findViewById<View>(R.id.immersive_status).setBackgroundColor(color)
 }
 
-fun Activity.isShowOfStatusBar(): Boolean {
-    return findViewById<View>(R.id.immersive_status)?.visibility == View.VISIBLE
+fun AppCompatActivity.setNavigationBarColor(color: Int) {
+    val state = immersiveState()
+    state.colorNavBar = color
+    if (state.stateNavBar == BarState.DISABLE) return
+    findViewById<View>(R.id.immersive_navigation).setBackgroundColor(color)
 }
 
-
-fun Activity.isShowOfNavigationBar(): Boolean {
-    return findViewById<View>(R.id.immersive_navigation)?.visibility == View.VISIBLE
-}
-
-
-fun Activity.showStatusBar() {
-    refreshContentLayoutParams(
-        false,
-        findViewById<View>(R.id.immersive_navigation)?.visibility == View.GONE
-    )
-}
-
-fun Activity.hideStatusBar() {
-    refreshContentLayoutParams(
-        true,
-        findViewById<View>(R.id.immersive_navigation)?.visibility == View.GONE
-    )
-}
-
-fun Activity.showNavigationBar() {
-    refreshContentLayoutParams(
-        findViewById<View>(R.id.immersive_status)?.visibility == View.GONE,
-        false
-    )
-}
-
-fun Activity.hideNavigationBar() {
-    refreshContentLayoutParams(
-        findViewById<View>(R.id.immersive_status)?.visibility == View.GONE,
-        true
-    )
-}
-
-fun Activity.setContentBackgroundColor(@ColorInt color: Int) {
-    val content = findViewById<View>(R.id.immersive_content)
-    content?.setBackgroundColor(color)
-}
-
-fun Activity.setContentBackgroundColorResource(@ColorRes colorRes: Int) {
-    val content = findViewById<View>(R.id.immersive_content)
-    content?.setBackgroundResource(colorRes)
-}
-
-
-fun Activity.setStatusBarColor(@ColorInt color: Int) {
-    val status = findViewById<View>(R.id.immersive_status)
-    status?.setBackgroundColor(color)
-}
-
-fun Activity.setStatusBarColorResource(@ColorRes colorRes: Int) {
-    val status = findViewById<View>(R.id.immersive_status)
-    status?.setBackgroundResource(colorRes)
-}
-
-
-fun Activity.setNavigationBarColor(@ColorInt color: Int) {
-    val navigation = findViewById<View>(R.id.immersive_navigation)
-    navigation?.setBackgroundColor(color)
-}
-
-fun Activity.setNavigationBarColorResource(@ColorRes colorRes: Int) {
-    val navigation = findViewById<View>(R.id.immersive_navigation)
-    navigation?.setBackgroundResource(colorRes)
-}
-
-
-fun Activity.setStatusContentColor(mode: MODE): Boolean {
-    return if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val navigationBar =
-            immersiveStates[this.hashCode().toString()]?.navigationBarContentIsDark ?: true
-        if (mode == MODE.WHITE) {
-            this.window.decorView.systemUiVisibility = systemUiFlag(false, navigationBar)
-            immersiveStates[this.hashCode().toString()]?.statusBarContentIsDark = false
-        } else {
-            this.window.decorView.systemUiVisibility = systemUiFlag(true, navigationBar)
-            immersiveStates[this.hashCode().toString()]?.statusBarContentIsDark = true
-        }
-        true
-    } else {
-        false
+var AppCompatActivity.stateStatusBar: BarState
+    get() {
+        return immersiveState().stateStatusBar
     }
-}
-
-
-fun Activity.setNavigationContentColor(mode: MODE): Boolean {
-    return if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val stateBar = immersiveStates[this.hashCode().toString()]?.statusBarContentIsDark ?: true
-        if (mode == MODE.WHITE) {
-            this.window.decorView.systemUiVisibility = systemUiFlag(stateBar, false)
-            immersiveStates[this.hashCode().toString()]?.navigationBarContentIsDark = false
-        } else {
-            this.window.decorView.systemUiVisibility = systemUiFlag(stateBar, true)
-            immersiveStates[this.hashCode().toString()]?.navigationBarContentIsDark = true
-        }
-        true
-    } else {
-        false
+    set(value) {
+        val state = immersiveState()
+        if (state.stateStatusBar == BarState.DISABLE) return
+        state.stateStatusBar = value
+        findViewById<View>(R.id.immersive_status).visibility = if (value == BarState.SHOW) View.VISIBLE else View.GONE
+        val contentView = findViewById<View>(R.id.immersive_content)
+        contentView.layoutParams = state.contentLayoutParam(this)
     }
-}
 
-fun Activity.setOnSoftKeyBoardChangeListener(
-    onSoftKeyBoardChangeListener: SoftKeyBoardKit.OnSoftKeyBoardChangeListener
-) {
-    val softKeyBoardListener = SoftKeyBoardKit(this)
-    softKeyBoardListener.setOnSoftKeyBoardChangeListener(onSoftKeyBoardChangeListener)
-}
+var AppCompatActivity.stateNavBar: BarState
+    get() {
+        return immersiveState().stateNavBar
+    }
+    set(value) {
+        val state = immersiveState()
+        if (state.stateNavBar == BarState.DISABLE) return
+        state.stateNavBar = value
+        findViewById<View>(R.id.immersive_navigation).visibility = if (value == BarState.SHOW) View.VISIBLE else View.GONE
+        val contentView = findViewById<View>(R.id.immersive_content)
+        contentView.layoutParams = state.contentLayoutParam(this)
+    }
 
-enum class MODE {
-    WHITE, BLACK
-}
+var AppCompatActivity.isLightStatusBar: Boolean
+    get() {
+        val state = immersiveState()
+        return state.isLightStatusBar
+    }
+    set(value) {
+        val state = immersiveState()
+        state.isLightStatusBar = value
+        window.decorView.systemUiVisibility = systemUiFlag()
+    }
+
+var AppCompatActivity.isLightNavBar: Boolean
+    get() {
+        val state = immersiveState()
+        return state.isLightNavBar
+    }
+    set(value) {
+        val state = immersiveState()
+        state.isLightNavBar = value
+        window.decorView.systemUiVisibility = systemUiFlag()
+    }

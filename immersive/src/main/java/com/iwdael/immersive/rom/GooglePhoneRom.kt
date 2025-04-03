@@ -1,14 +1,11 @@
 package com.iwdael.immersive.rom
 
 import android.app.Activity
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
-import com.iwdael.immersive.BRAND_LOWER_CASE
 import com.iwdael.immersive.Immersive.defaultPhoneRom
 import com.iwdael.immersive.PhoneRom
-import java.lang.Exception
 
 /**
  * author : iwdael
@@ -22,7 +19,7 @@ class GooglePhoneRom : PhoneRom {
         private const val CONTENT_KEY = "force_fsg_nav_bar"
     }
 
-    override fun isCurrentPhoneRom() = BRAND_LOWER_CASE.contains("google")
+    override fun isCurrentPhoneRom(brand: String, product: String, model: String) = brand.contains("google")
 
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)

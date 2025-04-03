@@ -16,7 +16,7 @@ import com.iwdael.immersive.PhoneRom
  */
 
 class DefaultPhoneRom : PhoneRom {
-    override fun isCurrentPhoneRom(): Boolean {
+    override fun isCurrentPhoneRom(brand: String, product: String, model: String): Boolean {
         return true
     }
 

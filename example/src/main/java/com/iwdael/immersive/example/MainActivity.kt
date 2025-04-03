@@ -18,13 +18,13 @@ class MainActivity : AppCompatActivity() {
     private var alpha = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v("dzq", "onCreate:${currentPhoneRom}")
+//        Log.v("dzq", "onCreate:${currentPhoneRom}")
         setContentView(
             R.layout.activity_main,
-            R.color.blue,
-            R.color.green,
-            hideStatusBar = false,
-            hideNavigationBar = false
+            resources.getColor(R.color.blue),
+            resources.getColor(R.color.green),
+            stateStatusBar = BarState.SHOW,
+            stateNavBar = BarState.DISABLE
         )
         val proRed = findViewById<SeekBar>(R.id.pro_red)
         val proGreen = findViewById<SeekBar>(R.id.pro_green)
@@ -88,23 +88,27 @@ class MainActivity : AppCompatActivity() {
         })
         val status = findViewById<Button>(R.id.btn_status)
         status.setOnClickListener {
-            if (isShowOfStatusBar()) hideStatusBar() else showStatusBar()
+            stateStatusBar = if (stateStatusBar == BarState.SHOW) {
+                BarState.HIDDEN
+            } else {
+                BarState.SHOW
+            }
         }
         val navigation = findViewById<Button>(R.id.btn_navigation)
         navigation.setOnClickListener {
-            if (isShowOfNavigationBar()) hideNavigationBar() else showNavigationBar()
+            stateNavBar = if (stateNavBar == BarState.SHOW) {
+                BarState.HIDDEN
+            } else {
+                BarState.SHOW
+            }
         }
         val btnStatusTextColor = findViewById<Button>(R.id.btn_status_text_color)
         btnStatusTextColor.setOnClickListener(object : View.OnClickListener {
             var key = 0
             override fun onClick(v: View) {
-                if (key % 2 == 0) {
-                    setStatusContentColor(MODE.BLACK)
-                    setNavigationContentColor(MODE.BLACK)
-                } else {
-                    setStatusContentColor(MODE.WHITE)
-                    setNavigationContentColor(MODE.WHITE)
-                }
+                isLightNavBar = key % 2 == 0
+                isLightStatusBar = key % 2 == 0
+
                 key++
             }
         })
@@ -112,8 +116,6 @@ class MainActivity : AppCompatActivity() {
         jump.setOnClickListener {
             startActivity(Intent(this@MainActivity, MainActivity::class.java))
         }
-        setStatusContentColor(MODE.WHITE)
-        setNavigationContentColor(MODE.WHITE)
     }
 
 
